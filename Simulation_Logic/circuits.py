@@ -1,18 +1,18 @@
 """
-Distance -3 surf. code circuit construct using Qiskit modules/packages
+Distance -5 surf. code circuit construct using Qiskit modules/packages
 """
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
 
 def create_surface_code_circuit():
     # Define quantum registers
-    # use 9 data qubits
+    # use 25 data qubits for distance-5 surface code
 
-    data_reg = QuantumRegister(9, 'data')
-    ancilla_x = QuantumRegister(8, 'ancilla_x')
-    ancilla_z = QuantumRegister(8, 'ancilla_z')
+    data_reg = QuantumRegister(25, 'data')
+    ancilla_x = QuantumRegister(12, 'ancilla_x')
+    ancilla_z = QuantumRegister(12, 'ancilla_z')
     # Classical registers for measurement outcomes
-    classical_z = ClassicalRegister(17, 'classical_z')
-    classical_x = ClassicalRegister(17, 'classical_x')
+    classical_z = ClassicalRegister(12, 'classical_z')
+    classical_x = ClassicalRegister(12, 'classical_x')
 
 
     # Create the quantum circuit
