@@ -30,7 +30,7 @@ More to consider, if time/interest allows.
 - RP2040: button input, LED chain control
 - Addressable LEDs w/hardware abstraction layer
 
-# Refernece Materials 
+# Reference Materials 
 - [START HERE: QFF_Hackathon_Prompts.pdf](https://github.com/CU-Boulder-Qiskit-Fall-Fest/Hackathon_Prompts/blob/main/QFF_Hackathon_Prompts.pdf) - follow the steps at the top to get qiskit installed and running. ALSO there are solid links and ref materials in the doc itself (not all relevant). 
 - [Paper/Code: Fault-Tolerant Stabilizer Measurements in Surface Codes with Three-Qubit Gates
 ]([https://arxiv.org/abs/2506.09029](https://github.com/oldjosias/three-qubit-ft-sc)) - the code and paper contain great reference material, more deep than we need, but solid visuals. code will be helpful for building circuit and timeline.
@@ -57,3 +57,12 @@ More to consider, if time/interest allows.
 
 # SUBMISSION INFO 
 We'll need a Jupyter notebook w/5 minute video
+
+# Development Ladder
+
+1) Quantum Circuit & Fault injection
+2) Syndrome Extraction & Data Logging
+3) Integration w/ PyMatching Decoder
+4) Hardware & Microcontroller Firmware
+5) System Integration & Demo Modes
+6) Finalization, Packaging, and Submission
