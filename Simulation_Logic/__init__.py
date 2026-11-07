@@ -10,6 +10,10 @@ from .decoder import decode_syndrome
 
 __version__ = "0.1.0"
 
+"""
+Example usage of the simulation logic.
+"""
+
 from qiskit import QuantumCircuit
 from qiskit_aer import AerSimulator
 

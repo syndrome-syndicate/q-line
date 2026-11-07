@@ -8,11 +8,11 @@ def create_surface_code_circuit():
     # use 9 data qubits
 
     data_reg = QuantumRegister(9, 'data')
-    ancilla_x = QuantumRegister(8, 'ancilla')
-    ancilla_z = QuantumRegister(8, 'ancilla')
+    ancilla_x = QuantumRegister(8, 'ancilla_x')
+    ancilla_z = QuantumRegister(8, 'ancilla_z')
     # Classical registers for measurement outcomes
-    classical_z = ClassicalRegister(17, 'classical')
-    classical_x = ClassicalRegister(17, 'classical')
+    classical_z = ClassicalRegister(17, 'classical_z')
+    classical_x = ClassicalRegister(17, 'classical_x')
 
 
     # Create the quantum circuit
