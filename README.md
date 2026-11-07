@@ -10,7 +10,7 @@ Feel free to edit/comment/etc. Also everyone has owner access to the org; PRETTY
 ```
 
 ## The Physical Device (WIP, this describes ultimate target)
-One acrylic plane displays 17 LEDs: 9 data qubit dots and 8 stabilizer checks (cyan = X-type, amber = Z-type). Stretch goal = 3 planes each representing a round. A rotary encoder scrubs through syndrome rounds. A visitor injects data or measurement faults via buttons, toggles between raw syndrome and detection event views, and presses decode to run PyMatching. A single verdict LED shows logical success or failure.
+One acrylic plane displays 17 LEDs: 9 data qubit dots and 8 stabilizer checks (cyan = X-type, amber = Z-type). Stretch goal = 3 planes each representing a round. A rotary encoder scrubs through syndrome rounds. A visitor injects data or measurement faults via buttons, toggles between raw syndrome and detection event views, and presses decode to run PyMatching. A single verdict LED shows logical success or failure.  
 The core takeaway: a data error and a measurement error leave different spacetime signatures. The instrument makes that difference physically visible.
 
 ## Stack (Feel free to explore, but this looked like a decent starting point... note that I did find a lib that was deprecated last month/we can review tomorrow afo)
@@ -22,8 +22,8 @@ The core takeaway: a data error and a measurement error leave different spacetim
 
 # Refernece Materials 
 - [START HERE: QFF_Hackathon_Prompts.pdf](https://github.com/CU-Boulder-Qiskit-Fall-Fest/Hackathon_Prompts/blob/main/QFF_Hackathon_Prompts.pdf) - follow the steps at the top to get qiskit installed and running. ALSO there are solid links and ref materials in the doc itself (not all relevant). 
-- [Paper: Fault-Tolerant Stabilizer Measurements in Surface Codes with Three-Qubit Gates
-](https://arxiv.org/abs/2506.09029) - great reference material, more deep than we need, but solid visuals  
+- [Paper/Code: Fault-Tolerant Stabilizer Measurements in Surface Codes with Three-Qubit Gates
+]([https://arxiv.org/abs/2506.09029](https://github.com/oldjosias/three-qubit-ft-sc)) - the code and paper contain great reference material, more deep than we need, but solid visuals. code will be helpful for building circuit and timeline.
 - [NVIDIA QEC reference](https://nvidia.github.io/cudaq-qec/components/qec/codes.html) - not what we will be using, but helpful for well-rounded understanding
 - [BWC: Hello Quantum](https://github.com/brainwavecollective/hello-quantum) - MIGHT work (quantum libraries have atrocious dependency problems) but this was our hello world ref... my goal was as simple as possible (will revisit this weekend to confirm if I have time)
 - [BWC: Quantum Paradoxes](https://github.com/brainwavecollective/quantum-paradoxes) - fork of what I found to be a very useful/interesting way of visualizing. Projects are interesting and the content is awesome. Helped me understand circuits.
