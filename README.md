@@ -21,7 +21,7 @@ The core takeaway: a data error and a measurement error leave different spacetim
 - Addressable LEDs w/hardware abstraction layer
 
 # Refernece Materials 
-- [START HERE: QFF_Hackathon_Prompts.pdf](https://github.com/CU-Boulder-Qiskit-Fall-Fest/Hackathon_Prompts/blob/main/QFF_Hackathon_Prompts.pdf) - follow the steps at the top to get qiskit installed and running
+- [START HERE: QFF_Hackathon_Prompts.pdf](https://github.com/CU-Boulder-Qiskit-Fall-Fest/Hackathon_Prompts/blob/main/QFF_Hackathon_Prompts.pdf) - follow the steps at the top to get qiskit installed and running. ALSO there are solid links and ref materials in the doc itself (not all relevant). 
 - [Paper: Fault-Tolerant Stabilizer Measurements in Surface Codes with Three-Qubit Gates
 ](https://arxiv.org/abs/2506.09029) - great reference material, more deep than we need, but solid visuals  
 - [NVIDIA QEC reference](https://nvidia.github.io/cudaq-qec/components/qec/codes.html) - not what we will be using, but helpful for well-rounded understanding
@@ -31,10 +31,12 @@ The core takeaway: a data error and a measurement error leave different spacetim
 # Timeline 
 ### Saturday
 - 12-no later than 4 Daniel & co & [Bldg 61](https://boulderlibrary.org/makerspaces/bldg-61/) figuring out the physical device (we have POC already, but hopefully can come up with a cool final form) 
-- 4-TBD @ main event 
+- Office hours for beginners on Saturday and Sunday ECCS 201 from 2:30-5 PM (likely super helpful!)
+- 9 AM - 9 PM Hackathon co-working sessions in ECCS 201
+
 
 ### Sunday 
-- all day @ main event 
+- 9 AM - 9 PM Hackathon co-working sessions in ECCS 201
 
 ### Monday 
 - Finalize all the things 
