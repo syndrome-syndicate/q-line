@@ -28,14 +28,14 @@ for i in range(3):
     event_id = f"event_{i}"
     event_type = random.choice(["Error", "Correction", "Warning"])
     event_classification = random.choice(["X", "Z", "H"])
-    step_count = random.randint(0, 10)
+    steps = random.randint(0, 10)
     qubits = random.sample(range(25), 1)  # Assuming 25 qubits in the circuit
     gates = random.sample(["X", "Z", "H"], 1)  # Assuming 3 types of gates in the circuit
     measurement = random.choice(["X", "Z", "H"])  # Assuming 3 types of measurements in the circuit
     errors = random.sample(["X", "Z", "H"], 1)  # Assuming 3 types of errors in the circuit
     shots = random.randint(100, 20000)  # Assuming 100 to 1000 shots in the circuit
-    metadata = {"step_count": step_count, "qubits": qubits, "gates": gates, "measurement": measurement, "errors": errors, "shots": shots}
-    event_map.add_event(event_id, event_type, event_classification, step_count=step_count, qubits=qubits, gates=gates, measurement=measurement, errors=errors, shots=shots, metadata=metadata)
+    metadata = {"steps": steps, "qubits": qubits, "gates": gates, "measurement": measurement, "errors": errors, "shots": shots}
+    event_map.add_event(event_id, event_type, event_classification, steps=steps, qubits=qubits, gates=gates, measurement=measurement, errors=errors, shots=shots, metadata=metadata)
 
 ### Log the events using the experiment_logger
 experiment_logger.log_experiment(event_map.get_all_events("logs"))

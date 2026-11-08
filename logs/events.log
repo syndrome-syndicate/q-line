@@ -1,4 +1,4 @@
-circuit_simulation: {'type': 'Simulation', 'classification': 'Circuit', 'qubit_location': 'qubit_circuit_simulation'}
-event_0: {'type': 'Warning', 'classification': 'X', 'qubit_location': 'qubit_event_0'}
-event_1: {'type': 'Error', 'classification': 'H', 'qubit_location': 'qubit_event_1'}
-event_2: {'type': 'Correction', 'classification': 'X', 'qubit_location': 'qubit_event_2'}
+circuit_simulation: {'type': 'Simulation', 'classification': 'Circuit', 'qubit_location': 'qubit_circuit_simulation', 'steps': None, 'qubits': None, 'gates': None, 'measurement': None, 'errors': None, 'shots': None, 'metadata': None}
+event_0: {'type': 'Warning', 'classification': 'X', 'qubit_location': 'qubit_event_0', 'steps': 0, 'qubits': [23], 'gates': ['Z'], 'measurement': 'X', 'errors': ['X'], 'shots': 4672, 'metadata': {'steps': 0, 'qubits': [23], 'gates': ['Z'], 'measurement': 'X', 'errors': ['X'], 'shots': 4672}}
+event_1: {'type': 'Warning', 'classification': 'X', 'qubit_location': 'qubit_event_1', 'steps': 10, 'qubits': [23], 'gates': ['H'], 'measurement': 'X', 'errors': ['H'], 'shots': 13925, 'metadata': {'steps': 10, 'qubits': [23], 'gates': ['H'], 'measurement': 'X', 'errors': ['H'], 'shots': 13925}}
+event_2: {'type': 'Error', 'classification': 'X', 'qubit_location': 'qubit_event_2', 'steps': 1, 'qubits': [6], 'gates': ['X'], 'measurement': 'H', 'errors': ['H'], 'shots': 969, 'metadata': {'steps': 1, 'qubits': [6], 'gates': ['X'], 'measurement': 'H', 'errors': ['H'], 'shots': 969}}

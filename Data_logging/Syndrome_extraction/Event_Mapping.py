@@ -9,11 +9,18 @@ class EventMap:
         self.event_types = []
         self.event_classifications = []
 
-    def add_event(self, event_id, event_type, event_classification):
+    def add_event(self, event_id, event_type, event_classification, steps=None, qubits=None, gates=None, measurement=None, errors=None, shots=None, metadata=None):
         self.event_map[event_id] = {
             "type": event_type,
             "classification": event_classification,
-            "qubit_location": f"qubit_{event_id}"
+            "qubit_location": f"qubit_{event_id}",
+            "steps": steps,
+            "qubits": qubits,
+            "gates": gates,
+            "measurement": measurement,
+            "errors": errors,
+            "shots": shots,
+            "metadata": metadata
         }
         self.event_count += 1
         self.last_event_id = event_id
