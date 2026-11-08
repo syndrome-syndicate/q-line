@@ -1,0 +1,3 @@
+event_0: {'type': 'Warning', 'classification': 'X', 'qubit_location': 'qubit_event_0'}
+event_1: {'type': 'Error', 'classification': 'H', 'qubit_location': 'qubit_event_1'}
+event_2: {'type': 'Correction', 'classification': 'X', 'qubit_location': 'qubit_event_2'}
