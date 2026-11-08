@@ -77,15 +77,14 @@ class ExperimentLogger:
 
 ### Define the JSON structure for experiment data
 experiment_data_template = {
-    "timestamp": "",
-    "steps": [],
-    "qubits": [],
-    "gates": [],
-    "measurements": [],
-    "errors": [],
-    "shots": [],
-    "metadata": {},
-    "experiment_number": "",
-    "parameters": {},
-    "results": {}
+    "type": None,
+    "classification": None,
+    "qubit_location": None,
+    "steps": None,
+    "qubits": None,
+    "gates": None,
+    "measurement": None,
+    "errors": None,
+    "shots": None,
+    "metadata": None
 }
