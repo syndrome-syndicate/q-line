@@ -2,11 +2,26 @@
 A physical QEC visualization instrument built on a distance-3 rotated surface code.
 NOTE: Even without the device, the target of the project is to use qiskit to exec the circuit/run error correction/identify results... same idea even w/o physical interface
 
+## Device Contract (WIP, FYI until we discuss)
+The application (tbd) will receive something like the following when an event occurs. In this case, "qubit button 4" (of the 9 available) was pressed, to introduce a Z error on that quibit (since error_selector is Z)
 ```
-Fellas, FYI my plan is to use this as a dumping ground for all the things, broken down by sections. 
-When we get closer to submission we can think about if/how we want to break out the info.
-For now, I'll use this as your one stop shop for all the things. 
-Feel free to edit/comment/etc. Also everyone has owner access to the org; PRETTY PLEASE be responsible.
+{
+  "type": "event",
+  "seq": 107,
+  "timestamp_ms": 123456,
+  "change": {
+    "control": "qubit_button",
+    "index": 4,
+    "action": "pressed"
+  },
+  "state": {
+    "qubit_buttons": [false, false, false, false, true, false, false, false, false],
+    "error_selector": "Z",
+    "run_selector": "run",
+    "step_button": false,
+    "mode_selector": 2
+  }
+}
 ```
 
 ## The Physical Device (WIP, this describes ultimate target)
