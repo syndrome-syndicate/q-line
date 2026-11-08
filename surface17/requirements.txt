@@ -1,0 +1,8 @@
+# Tested on Windows 11, Python 3.11.
+# qiskit-qec is not on PyPI and only works with qiskit 1.x (not 0.x, not 2.x).
+# Install qiskit-qec separately, see surface17/README.md.
+qiskit==1.4.5
+qiskit-aer==0.16.4
+pymatching>=2.2
+matplotlib>=3.8
+numpy<2.3
