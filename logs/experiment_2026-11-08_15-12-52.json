@@ -1,0 +1,28 @@
+{
+    "circuit_simulation": {
+        "type": "Simulation",
+        "classification": "Circuit",
+        "qubit_location": "qubit_circuit_simulation",
+        "steps": null,
+        "qubits": null,
+        "gates": null,
+        "measurement": null,
+        "errors": null,
+        "shots": null,
+        "metadata": {
+            "backend_name": "aer_simulator",
+            "success": true,
+            "status": "COMPLETED",
+            "results": [
+                {
+                    "shots": 1024,
+                    "success": true,
+                    "status": "DONE",
+                    "counts": {
+                        "000000000000 000000000000": 1024
+                    }
+                }
+            ]
+        }
+    }
+}

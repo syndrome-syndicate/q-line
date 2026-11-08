@@ -14,6 +14,9 @@ class ExperimentLogger:
             json.dump(experiment_data, f, indent=4)
         return log_file
 
+    def get_qubit_location(self, experiment_data: dict):
+        return experiment_data.get("qubit_location", None)
+
     def get_log_dir(self):
         return self.log_dir
 

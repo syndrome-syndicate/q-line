@@ -9,18 +9,34 @@ class EventMap:
         self.event_types = []
         self.event_classifications = []
 
-    def add_event(self, event_id, event_type, event_classification, steps=None, qubits=None, gates=None, measurement=None, errors=None, shots=None, metadata=None):
+    def add_event(self, event_id, event_type, event_classification, steps=None, qubits=None, gates=None, measurement=None, errors=None, shots=None, metadata=None, aer_result=None):
+        counts = None
+        success = None
+        status = None
+
+        if aer_result is not None:
+            try:
+                counts = aer_result.get_counts()
+            except (AttributeError, TypeError):
+                pass
+
+            experiments = getattr(aer_result, "results", None)
+            if experiments:
+                experiment = experiments[0]
+                shots = getattr(experiment, "shots", shots)
+                success = getattr(experiment, "success", success)
+                status = getattr(experiment, "status", status)
+
         self.event_map[event_id] = {
             "type": event_type,
             "classification": event_classification,
             "qubit_location": f"qubit_{event_id}",
-            "steps": steps,
-            "qubits": qubits,
-            "gates": gates,
-            "measurement": measurement,
-            "errors": errors,
-            "shots": shots,
-            "metadata": metadata
+            "metadata": metadata,
+            "qubit_metadata": {
+                "data_qubits": None,
+                "syndrome_qubits": None,
+                "all_qubits": None,
+            },
         }
         self.event_count += 1
         self.last_event_id = event_id

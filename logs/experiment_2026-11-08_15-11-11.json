@@ -1,0 +1,14 @@
+{
+    "circuit_simulation": {
+        "type": "Simulation",
+        "classification": "Circuit",
+        "qubit_location": "qubit_circuit_simulation",
+        "steps": null,
+        "qubits": null,
+        "gates": null,
+        "measurement": null,
+        "errors": null,
+        "shots": null,
+        "metadata": null
+    }
+}

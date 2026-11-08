@@ -6,6 +6,9 @@ class EventDetection:
         self.events.append(event_data)
         return event_data
 
+    def get_qubit_location(self, event_data: dict):
+        return event_data.get("qubit_location", None)
+
     def get_all_events(self):
         return self.events
 
