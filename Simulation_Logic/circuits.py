@@ -19,12 +19,22 @@ def create_surface_code_circuit():
     circuit = QuantumCircuit(data_reg, ancilla_x, ancilla_z, classical_z, classical_x)
 
     # Syndrome ExtractionRounds
-
     for round_idx in range(3):
+        # Reset the round index at the beginning of each iteration
+        round_idx = 0
         # Perform syndrome extraction for each round
-        # This is a placeholder for the actual circuit operations
-        pass
-
+        # Apply the necessary gates for syndrome extraction
+        for i in range(12):
+            circuit.cx(data_reg[i], ancilla_x[i])
+            circuit.cx(data_reg[i], ancilla_z[i])
+        # Measure the ancilla qubits
+        for i in range(12):
+            circuit.measure(ancilla_x[i], classical_x[i])
+            circuit.measure(ancilla_z[i], classical_z[i])
+        circuit.barrier()
+        circuit.reset(ancilla_x)
+        circuit.reset(ancilla_z)
+        round_idx += 1
     return circuit
 
 if __name__ == "__main__":
