@@ -2,6 +2,9 @@
 Decoder module for the surface code simulation.
 """
 ### References: https://nvidia.github.io/cudaq-qec/components/qec/decoders.html
+### Reference 2: https://arxiv.org/pdf/2306.09767 (Union-find quantum decoding w/o Union Find, Griffiths et. al (2023))
+
+
 import qec_aer as qec
 from qec_aer import Decoder, DecoderResult, UnionFindDecoder
 

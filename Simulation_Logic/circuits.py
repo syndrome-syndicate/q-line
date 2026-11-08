@@ -5,7 +5,7 @@ from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister
 
 def create_surface_code_circuit():
     # Define quantum registers
-    # use 25 data qubits for distance-5 surface code
+    # use 25 data qubits for distance-5 surface code in accordance with prompt 2 constraints
 
     data_reg = QuantumRegister(25, 'data')
     ancilla_x = QuantumRegister(12, 'ancilla_x')
