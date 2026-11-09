@@ -1,0 +1,11 @@
+[project]
+name = "syndrome-tesseract-device"
+version = "0.1.0"
+description = "Pico display-device JSON serial interface"
+requires-python = ">=3.14.9"
+dependencies = [
+    "pyserial>=3.5,<4",
+]
+
+[tool.uv]
+package = false
