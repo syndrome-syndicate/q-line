@@ -19,6 +19,3 @@ if __name__ == "__main__":
     inject_fault(circuit, 1, 'Z')
     inject_fault(circuit, 2, 'H')
     print(circuit)
-
-
-
