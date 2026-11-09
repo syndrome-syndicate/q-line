@@ -33,13 +33,13 @@ class RoundPlaybackTests(unittest.TestCase):
             [step["phase"] for step in history["steps"]],
             ["X checks", "Z checks", "Decode"] * 3 + ["Reset"],
         )
-        self.assertEqual(history["steps"][1]["syndromes"]["Z"], [1])
+        self.assertEqual(history["steps"][1]["syndromes"]["Z"], [0])
         self.assertEqual(history["steps"][0]["syndromes"]["X"], [])
 
     def test_z_fault_is_detected_by_adjacent_x_check(self):
         _, history = self.run_simulation("Z")
 
-        self.assertEqual(history["steps"][0]["syndromes"]["X"], [0])
+        self.assertEqual(history["steps"][0]["syndromes"]["X"], [1])
         self.assertEqual(history["steps"][1]["syndromes"]["Z"], [])
 
     def test_saved_history_replays_on_grid_and_resets_at_last_step(self):
@@ -53,7 +53,7 @@ class RoundPlaybackTests(unittest.TestCase):
             self.assertEqual(animation.index, 0)
 
             animation.next_button._observers.process("clicked", None)
-            self.assertEqual(visualizer.reacting_z_checks, {1})
+            self.assertEqual(visualizer.reacting_z_checks, {0})
             self.assertEqual(visualizer.faulted_data, {0})
             self.assertEqual(visualizer.ax.get_xlim(), (-0.25, 3.25))
             self.assertEqual(visualizer.active_basis, "Z")
@@ -87,13 +87,13 @@ class RoundPlaybackTests(unittest.TestCase):
             playback.next_button._observers.process("clicked", None)
 
         self.assertEqual(visualizer.current_step["phase"], "X checks")
-        self.assertEqual(visualizer.reacting_x_checks, {2})
+        self.assertEqual(visualizer.reacting_x_checks, {0})
         self.assertEqual(visualizer.active_basis, "X")
         self.assertEqual(len(visualizer.check_outcomes), 4)
         self.assertEqual(visualizer.faulted_data, {0, 2})
         self.assertEqual(
             playback.steps[5]["syndromes"]["X"],
-            [2],
+            [0],
         )
         self.assertIn({"qubit": 2, "pauli": "Z"}, playback.steps[5]["corrections"])
         plt.close(visualizer.fig)

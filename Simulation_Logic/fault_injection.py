@@ -7,6 +7,8 @@ def inject_fault(circuit, qubit, gate):
         circuit.x(qubit)
     elif gate == 'Z':
         circuit.z(qubit)
+    elif gate == 'Y':
+        circuit.y(qubit)
     elif gate == 'H':
         circuit.h(qubit)
     else:

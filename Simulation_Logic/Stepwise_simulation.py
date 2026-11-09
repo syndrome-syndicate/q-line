@@ -65,6 +65,7 @@ class StepwiseSimulation:
         num_rounds: int = 4,
         shots: int = 1,
         record_steps: bool = True,
+        seed: int | None = None,
     ) -> list[dict[str, Any]]:
         """Record up to ``num_rounds`` and run the resulting circuit for syndromes."""
         if self.circuit is None:
@@ -157,7 +158,7 @@ class StepwiseSimulation:
             self._record_fault_steps(final_faults, round_index)
         if record_steps and self.steps and round_index not in completed_rounds:
             self._record_circuit_structure("round", round_index)
-        self._simulate_measurements(shots)
+        self._simulate_measurements(shots, seed)
         return self.steps
 
     def detect_event(self, event_data: Any) -> None:
@@ -335,11 +336,11 @@ class StepwiseSimulation:
                 return len(register)
         return 1
 
-    def _simulate_measurements(self, shots: int) -> None:
+    def _simulate_measurements(self, shots: int, seed: int | None = None) -> None:
         if self.circuit_state is None or not self.circuit_state.num_clbits:
             return
         result = AerSimulator(method="stabilizer").run(
-            self.circuit_state, shots=shots, memory=True
+            self.circuit_state, shots=shots, memory=True, seed_simulator=seed
         ).result()
         memories = result.get_memory()
         for round_data in self.rounds:

@@ -5,13 +5,18 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Circle
 from matplotlib.widgets import Button
 
-DATA_POSITIONS = [(column + 0.5, row + 0.5) for row in range(3) for column in range(3)]
-Z_POSITIONS = [(0, 2), (1, 1), (2, 2), (3, 1)]
-X_POSITIONS = [(1, 0), (1, 2), (2, 1), (2, 3)]
+from Simulation_Logic.circuits import (
+    X_CHECK_POSITIONS,
+    X_CHECK_SUPPORTS,
+    Z_CHECK_POSITIONS,
+    Z_CHECK_SUPPORTS,
+    data_label,
+)
 
-# Data-qubit indices adjacent to each check on the 3x3 rotated surface-code patch.
-Z_CHECK_SUPPORTS = [(3, 6), (0, 1, 3, 4), (4, 5, 7, 8), (2, 5)]
-X_CHECK_SUPPORTS = [(0, 1), (3, 4, 6, 7), (1, 2, 4, 5), (7, 8)]
+DATA_POSITIONS = [(column + 0.5, row + 0.5) for row in range(3) for column in range(3)]
+Z_POSITIONS = list(Z_CHECK_POSITIONS)
+X_POSITIONS = list(X_CHECK_POSITIONS)
+
 FAULT_COLOR = "red"
 
 
@@ -61,7 +66,7 @@ class CircuitVisualizer:
                     )
                 )
             self.ax.text(
-                *center, str(index), ha="center", va="center", color="white", zorder=3
+                *center, data_label(index), ha="center", va="center", color="white", zorder=3
             )
 
     def place_z_stabilizers(self):
@@ -303,9 +308,12 @@ class CircuitVisualizer:
 class StepPlayback:
     """Button-controlled playback of recorded round and circuit steps."""
 
-    def __init__(self, visualizer, steps, interval):
+    def __init__(self, visualizer, steps, interval, resimulate=None, faults=None):
         self.visualizer = visualizer
         self.steps = steps
+        # resimulate(faults) -> steps re-runs Aer with every fault injected so far.
+        self.resimulate = resimulate
+        self.faults = [dict(fault) for fault in faults or []]
         self.index = 0
         self.playing = False
         self.selected_qubit = 0
@@ -317,7 +325,7 @@ class StepPlayback:
             button_ax = visualizer.fig.add_axes(
                 [0.075 + qubit * 0.1, 0.255, 0.075, 0.055]
             )
-            button = Button(button_ax, f"D{qubit}")
+            button = Button(button_ax, data_label(qubit))
             button.on_clicked(
                 lambda _event, selected=qubit: self.select_qubit(selected)
             )
@@ -375,13 +383,16 @@ class StepPlayback:
             return
 
         fault = {"qubit": self.selected_qubit, "gate": self.selected_gate}
+        if self.resimulate is not None:
+            self._inject_and_resimulate(fault, current_step)
+            return
+
         target_phase = {"X": "Z checks", "Z": "X checks"}.get(self.selected_gate)
         target_index = next(
             (
                 step_index
                 for step_index, step in enumerate(self.steps)
                 if step_index > self.index
-                and step.get("round") == round_number
                 and step.get("phase") == target_phase
             ),
             None,
@@ -408,7 +419,7 @@ class StepPlayback:
                 (
                     step
                     for step in self.steps[target_index + 1 :]
-                    if step.get("round") == round_number
+                    if step.get("round") == self.steps[target_index].get("round")
                     and step.get("phase") == "Decode"
                 ),
                 None,
@@ -418,7 +429,29 @@ class StepPlayback:
                 self._update_decoder_correction(decode_step)
 
         self.inject_button.label.set_text(
-            f"{self.selected_gate} fault on D{self.selected_qubit}"
+            f"{self.selected_gate} fault on {data_label(self.selected_qubit)}"
+        )
+        self.show_step()
+
+    def _inject_and_resimulate(self, fault, current_step):
+        """Place the fault at the current point in time and re-run the circuit."""
+        from Simulation_Logic import fault_location
+
+        location = fault_location(current_step)
+        if location is None:
+            self.inject_button.label.set_text("Select a check step")
+            self.visualizer.fig.canvas.draw_idle()
+            return
+        round_number, after = location
+        self.faults.append(
+            {**fault, "round": round_number, "after": after, "step": self.index}
+        )
+        self.steps[:] = self.resimulate(self.faults)
+        last_round = max(step.get("round", 0) for step in self.steps)
+        too_late = after == "Z" and round_number == last_round
+        self.inject_button.label.set_text(
+            f"{fault['gate']} fault on {data_label(fault['qubit'])}"
+            + (" (no checks left)" if too_late else "")
         )
         self.show_step()
 
@@ -556,7 +589,27 @@ def animate_rounds(visualizer, history, interval=10, repeat=False):
     if not isinstance(interval, int) or isinstance(interval, bool) or interval < 1:
         raise ValueError("interval must be a positive integer number of milliseconds")
 
-    visualizer.animation = StepPlayback(visualizer, steps, interval)
+    resimulate = None
+    faults = []
+    if isinstance(history, dict) and history.get("rounds") and steps[0].get("phase"):
+        from Simulation_Logic import simulate_history
+
+        num_rounds = history.get("num_rounds") or len(history["rounds"])
+        seed = history.get("seed")
+        faults = [
+            event
+            for event in history.get("events", [])
+            if isinstance(event, dict)
+            and isinstance(event.get("qubit"), int)
+            and event.get("gate") in {"X", "Z", "H"}
+        ]
+
+        def resimulate(all_faults):
+            return simulate_history(num_rounds, all_faults, seed=seed)["steps"]
+
+    visualizer.animation = StepPlayback(
+        visualizer, steps, interval, resimulate=resimulate, faults=faults
+    )
     return visualizer.animation
 
 
