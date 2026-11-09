@@ -13,12 +13,12 @@ The application (tbd) will receive something like the following when an event oc
     "control": "qubit_button",
     "index": 4,
     "action": "pressed"
+
+    // the step button and quibit buttons are all momentary, so they should be event only, not presented state
   },
   "state": {
-    "qubit_buttons": [false, false, false, false, true, false, false, false, false],
     "error_selector": "Z",
     "run_selector": "run",
-    "step_button": false,
     "mode_selector": 2
   }
 }
