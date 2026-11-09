@@ -1,20 +1,36 @@
 from datetime import datetime
 from pathlib import Path
 import json
+from typing import Any, Protocol
+
+
+class SimulationHistory(Protocol):
+    def get_history(self) -> dict[str, Any]: ...
 
 class ExperimentLogger:
     def __init__(self, log_dir: str):
         self.log_dir = Path(log_dir)
         self.log_dir.mkdir(parents=True, exist_ok=True)
 
-    def log_experiment(self, experiment_data: dict):
-        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        log_file = self.log_dir / f"experiment_{timestamp}.json"
-        with open(log_file, "w") as f:
-            json.dump(experiment_data, f, indent=4)
-        return log_file
+    def log_experiment(self, experiment_data: dict[str, Any]) -> Path:
+        timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S_%f")
+        suffix = 0
+        while True:
+            unique_suffix = f"_{suffix}" if suffix else ""
+            log_file = self.log_dir / f"experiment_{timestamp}{unique_suffix}.json"
+            try:
+                with open(log_file, "x", encoding="utf-8") as f:
+                    json.dump(experiment_data, f, indent=4)
+                return log_file
+            except FileExistsError:
+                suffix += 1
 
-    def get_qubit_location(self, experiment_data: dict):
+    def log_simulation(self, simulation: SimulationHistory) -> Path:
+        """Persist the round measurements and per-instruction circuit history."""
+        history = simulation.get_history()
+        return self.log_experiment(history)
+
+    def get_qubit_location(self, experiment_data: dict[str, Any]) -> Any:
         return experiment_data.get("qubit_location", None)
 
     def get_log_dir(self):
@@ -83,7 +99,8 @@ experiment_data_template = {
     "type": None,
     "classification": None,
     "qubit_location": None,
-    "steps": None,
+    "steps": [],
+    "rounds": [],
     "qubits": None,
     "gates": None,
     "measurement": None,
