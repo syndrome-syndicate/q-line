@@ -60,7 +60,12 @@ class StepwiseSimulation:
             self._pending_faults.clear()
         self._next_step_index = 0
 
-    def run_rounds(self, num_rounds: int = 4, shots: int = 1) -> list[dict[str, Any]]:
+    def run_rounds(
+        self,
+        num_rounds: int = 4,
+        shots: int = 1,
+        record_steps: bool = True,
+    ) -> list[dict[str, Any]]:
         """Record up to ``num_rounds`` and run the resulting circuit for syndromes."""
         if self.circuit is None:
             raise RuntimeError("Build a circuit state before running the simulation")
@@ -72,6 +77,8 @@ class StepwiseSimulation:
             raise TypeError("shots must be an integer")
         if shots < 1:
             raise ValueError("shots must be at least 1")
+        if not isinstance(record_steps, bool):
+            raise TypeError("record_steps must be a boolean")
 
         self.circuit_state = self.circuit.copy_empty_like()
         self.steps.clear()
@@ -106,8 +113,13 @@ class StepwiseSimulation:
                     if round_index > num_rounds:
                         break
 
-            faults = self._apply_scheduled_faults(round_index)
-            self._record_fault_steps(faults, round_index)
+            faults = (
+                self._apply_scheduled_faults(round_index)
+                if not marked_rounds or round_start
+                else []
+            )
+            if record_steps:
+                self._record_fault_steps(faults, round_index)
 
             qubit_indices = [
                 self.circuit.find_bit(qubit).index for qubit in instruction.qubits
@@ -121,26 +133,29 @@ class StepwiseSimulation:
                 [self.circuit_state.clbits[index] for index in clbit_indices],
             )
 
-            diagram = str(self.circuit_state.draw(output="text"))
-            step = {
-                "step": self._next_step_index,
-                "round": round_index,
-                "operation": instruction.operation.name,
-                "qubits": qubit_indices,
-                "classical_bits": clbit_indices,
-                "faults": [],
-                "diagram": diagram,
-            }
-            self.steps.append(step)
+            if record_steps:
+                diagram = str(self.circuit_state.draw(output="text"))
+                self.steps.append(
+                    {
+                        "step": self._next_step_index,
+                        "round": round_index,
+                        "operation": instruction.operation.name,
+                        "qubits": qubit_indices,
+                        "classical_bits": clbit_indices,
+                        "faults": [],
+                        "diagram": diagram,
+                    }
+                )
             self._record_measurements(instruction, round_index)
-            if re.fullmatch(r"round_\d+_end", label):
+            if record_steps and re.fullmatch(r"round_\d+_end", label):
                 self._record_circuit_structure("round", round_index)
                 completed_rounds.add(round_index)
             self._next_step_index += 1
 
         final_faults = self._apply_scheduled_faults(round_index)
-        self._record_fault_steps(final_faults, round_index)
-        if self.steps and round_index not in completed_rounds:
+        if record_steps:
+            self._record_fault_steps(final_faults, round_index)
+        if record_steps and self.steps and round_index not in completed_rounds:
             self._record_circuit_structure("round", round_index)
         self._simulate_measurements(shots)
         return self.steps
