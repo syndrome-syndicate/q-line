@@ -68,6 +68,27 @@ def make_frame(
     return frame
 
 
+FRAME_KEYS = ("Data", "Sz", "Sx", "logical failure", "reset")
+
+
+def load_frames(folder: str | Path) -> list[tuple[Path, dict[str, Any]]]:
+    """Read every frame_*.json in a run folder, in order."""
+    folder = Path(folder)
+    files = sorted(folder.glob("frame_*.json"))
+    if not files:
+        raise ValueError(f"no frame_*.json files in {folder}")
+    frames = []
+    for path in files:
+        frame = json.loads(path.read_text(encoding="utf-8"))
+        missing = [key for key in FRAME_KEYS if key not in frame]
+        if missing:
+            raise ValueError(f"{path.name} is missing {missing}")
+        if len(frame["Data"]) != NUM_DATA or len(frame["Sz"]) != NUM_CHECKS or len(frame["Sx"]) != NUM_CHECKS:
+            raise ValueError(f"{path.name} has the wrong number of qubits or checks")
+        frames.append((path, frame))
+    return frames
+
+
 class PicoFrameWriter:
     """Save frames as data_to_pico/<YYYY-MM-DD_HH-MM-SS>/frame_0000.json, ..."""
 
@@ -80,6 +101,13 @@ class PicoFrameWriter:
             suffix += 1
         self.directory.mkdir(parents=True)
         self.count = 0
+
+    def remove_if_empty(self) -> None:
+        """Drop the run folder if nothing was saved (e.g. a replay-only session)."""
+        try:
+            self.directory.rmdir()  # only succeeds when the folder is empty
+        except OSError:
+            pass
 
     def write(self, frame: dict[str, Any]) -> Path:
         path = self.directory / f"frame_{self.count:04d}.json"

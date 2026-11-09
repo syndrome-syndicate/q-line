@@ -43,6 +43,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--interval", type=int, default=500, help="milliseconds per step while playing")
     parser.add_argument("--seed", type=int, default=1, help="Aer seed (keeps re-runs consistent)")
     parser.add_argument("--no-led", action="store_true", help="don't connect to the LED panel")
+    parser.add_argument("--replay", metavar="FOLDER", help="start in Replay mode with a data_to_pico run folder")
     return parser
 
 
@@ -57,7 +58,9 @@ def main(argv: list[str] | None = None) -> None:
         from Live_visualizer import LiveVisualizer
 
         led = None if args.no_led else PicoLink()
-        app = LiveVisualizer(args.interval, args.seed, "data_to_pico", args.fault, led=led)
+        app = LiveVisualizer(
+            args.interval, args.seed, "data_to_pico", args.fault, led=led, replay=args.replay
+        )
         plt.show()
         return app
 

@@ -131,6 +131,54 @@ class LiveMemoryTests(unittest.TestCase):
             app.close()
             plt.close(app.fig)
 
+    def test_replay_mode_resends_a_saved_run(self):
+        from Live_visualizer import LiveVisualizer
+
+        class FakeLink:
+            connected, status = True, "fake"
+
+            def __init__(self):
+                self.frames = []
+
+            def send(self, frame):
+                self.frames.append(frame)
+
+            def close(self):
+                pass
+
+        def click(button):
+            button._observers.process("clicked", None)
+
+        with tempfile.TemporaryDirectory() as root:
+            link = FakeLink()
+            app = LiveVisualizer(seed=1, out_root=root, led=link)
+            click(app.qubit_buttons[6])
+            for _ in range(4):
+                click(app.next_button)
+            run_folder = app.writer.directory
+            recorded = [json.loads(f.read_text()) for f in sorted(run_folder.glob("*.json"))]
+            self.assertEqual(link.frames, recorded)
+
+            link.frames.clear()
+            app.choose_folder(run_folder)  # switches to Replay, shows frame 1
+            self.assertEqual(app.mode, "Replay")
+            self.assertFalse(app.qubit_buttons[0].active)
+            click(app.qubit_buttons[0])  # injection is off in Replay
+            for _ in range(10):  # runs past the end: stops at the last frame
+                click(app.next_button)
+            self.assertEqual(link.frames, recorded)
+            self.assertEqual(len(list(run_folder.glob("*.json"))), len(recorded))  # nothing re-saved
+
+            click(app.reset_button)  # Restart: frame 1 again, clearing the panel
+            self.assertEqual(app.replay_index, 0)
+            self.assertTrue(link.frames[-1]["reset"])
+
+            app.set_mode("Live")
+            self.assertEqual(app.mode, "Live")
+            self.assertTrue(app.qubit_buttons[0].active)
+            self.assertTrue(link.frames[-1]["reset"])
+            plt.close(app.fig)
+
     def test_writer_uses_one_folder_per_run(self):
         with tempfile.TemporaryDirectory() as root:
             first, second = PicoFrameWriter(root), PicoFrameWriter(root)
