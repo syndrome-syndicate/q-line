@@ -17,7 +17,7 @@ You can also [watch a short video of the q-line running in realtime](q-line.mp4)
 ## Display Device Interface
 See the [Display Device README](device/README.md) for setup, the Python API, JSON protocol, and emulator documentation.
 
-You can run this locally with `uv run .\Run_Circuit.py`. If no physical device is detected, a local emulator launches automatically.
+You can run this locally with `uv run Run_Circuit.py`. If no physical device is detected, a local emulator launches automatically.
 
 > [!WARNING]
 >
