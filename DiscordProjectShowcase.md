@@ -1,4 +1,4 @@
-# 🚨 Hackathon Submission for the Syndrome Syndicate 
+# 🚨 Q-LINE: Hackathon Submission for the Syndrome Syndicate 
 
 ### **👥 Team Members and File Submission** 
 Daniel Ritchie [brainwavecoder9](https://github.com/brainwavecoder9), Mullai Vaneshwar Sampangi Raman [kuramaku88](https://github.com/kuramaku88), Timothy Williams [Manta4000](https://github.com/Manta4000), Sean Flannery [sflans99](https://github.com/sflans99)
