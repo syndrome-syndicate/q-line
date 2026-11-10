@@ -30,6 +30,7 @@ Board layout and D1..D9 numbering: Simulation_Logic/circuits.py.
 from __future__ import annotations
 
 import argparse
+import json
 from collections import deque
 from pathlib import Path
 
@@ -51,6 +52,7 @@ SELECTED = "#FFCC80"
 IDLE_BUTTON = "0.95"
 MIN_INTERVAL_MS = 50
 MODES = ("Live", "Replay")
+REPLAY_RUNS = Path("replay_runs")  # IBM_Run.py output; where the folder picker opens
 
 
 class LiveVisualizer:
@@ -63,6 +65,7 @@ class LiveVisualizer:
         self.replay_folder: Path | None = None
         self.replay_frames: list = []  # [(path, frame), ...]
         self.replay_index = 0
+        self.replay_steps: dict = {}  # frame file name -> step name (from steps.json, if any)
         self.led = led  # PicoLink: every saved frame is also sent to the LED panel
         self.gate = "X"
         self.playing = False
@@ -181,6 +184,13 @@ class LiveVisualizer:
             return
         self.replay_folder = Path(folder)
         self.replay_frames = frames
+        self.replay_steps = {}
+        steps_file = self.replay_folder / "steps.json"  # written by IBM_Run.py
+        if steps_file.exists():
+            try:
+                self.replay_steps = json.loads(steps_file.read_text(encoding="utf-8")).get("steps", {})
+            except (OSError, ValueError):
+                self.replay_steps = {}
         self._log(f"Loaded {len(frames)} frames from {self.replay_folder.name}.")
         if self.mode != "Replay":
             self.set_mode("Replay")  # restarts the replay
@@ -200,7 +210,10 @@ class LiveVisualizer:
 
             root = parent = tkinter.Tk()
             root.withdraw()
-        start = self.replay_folder.parent if self.replay_folder else self.out_root
+        if self.replay_folder:
+            start = self.replay_folder.parent
+        else:
+            start = REPLAY_RUNS if REPLAY_RUNS.exists() else self.out_root
         try:
             return filedialog.askdirectory(
                 parent=parent,
@@ -334,7 +347,8 @@ class LiveVisualizer:
         if self.mode == "Replay":
             if self.replay_frames:
                 path, frame = self.replay_frames[self.replay_index]
-                title = f"Replay  |  {path.name}  ({self.replay_index + 1}/{len(self.replay_frames)})"
+                step = self.replay_steps.get(path.name, path.name)
+                title = f"Replay  |  {step}  ({self.replay_index + 1}/{len(self.replay_frames)})"
             else:
                 frame, title = make_frame({}, None), "Replay  |  choose a folder"
             self._draw_board(frame, None, title)

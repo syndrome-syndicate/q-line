@@ -1,0 +1,77 @@
+{
+  "name": "x_D9_late",
+  "description": "X on D9 just before the final readout: only the readout sees it",
+  "faults": [
+    {
+      "kind": "X",
+      "target": 8,
+      "round": 4,
+      "description": "X on D9 before round 4"
+    }
+  ],
+  "rounds": 3,
+  "shots": 4000,
+  "logical_failures": 1010,
+  "logical_error_rate": 0.2525,
+  "shots_without_detections": 15,
+  "x_detection_rate_per_round": [
+    0.0,
+    0.161,
+    0.2073125
+  ],
+  "z_detection_rate_per_round": [
+    0.135,
+    0.188,
+    0.1833125
+  ],
+  "z_detection_rate_readout": 0.305125,
+  "circuit": {
+    "depth": 254,
+    "two_qubit_gates": 275,
+    "ops": {
+      "sx": 518,
+      "cz": 275,
+      "rz": 225,
+      "measure": 33,
+      "reset": 16,
+      "barrier": 4,
+      "x": 1
+    },
+    "physical_qubits": [
+      18,
+      10,
+      7,
+      32,
+      28,
+      17,
+      36,
+      30,
+      26,
+      9,
+      31,
+      25,
+      48,
+      33,
+      8,
+      29,
+      27
+    ]
+  },
+  "saved_shots": {
+    "clean": [
+      54,
+      71,
+      102
+    ],
+    "corrected": [
+      0,
+      1,
+      2
+    ],
+    "logical_failure": [
+      3,
+      13,
+      19
+    ]
+  }
+}

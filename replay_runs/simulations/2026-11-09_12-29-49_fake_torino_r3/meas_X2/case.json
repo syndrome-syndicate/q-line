@@ -1,0 +1,76 @@
+{
+  "name": "meas_X2",
+  "description": "measurement error on X2 in round 2",
+  "faults": [
+    {
+      "kind": "M",
+      "target": "X2",
+      "round": 2,
+      "description": "measurement error on X2 in round 2"
+    }
+  ],
+  "rounds": 3,
+  "shots": 4000,
+  "logical_failures": 824,
+  "logical_error_rate": 0.206,
+  "shots_without_detections": 10,
+  "x_detection_rate_per_round": [
+    0.0,
+    0.31225,
+    0.32225
+  ],
+  "z_detection_rate_per_round": [
+    0.14,
+    0.1881875,
+    0.18075
+  ],
+  "z_detection_rate_readout": 0.1164375,
+  "circuit": {
+    "depth": 253,
+    "two_qubit_gates": 273,
+    "ops": {
+      "sx": 512,
+      "cz": 273,
+      "rz": 223,
+      "measure": 33,
+      "reset": 16,
+      "barrier": 4
+    },
+    "physical_qubits": [
+      18,
+      10,
+      7,
+      32,
+      28,
+      17,
+      36,
+      30,
+      26,
+      9,
+      31,
+      25,
+      48,
+      33,
+      8,
+      29,
+      27
+    ]
+  },
+  "saved_shots": {
+    "clean": [
+      339,
+      832,
+      1289
+    ],
+    "corrected": [
+      0,
+      1,
+      2
+    ],
+    "logical_failure": [
+      4,
+      14,
+      20
+    ]
+  }
+}

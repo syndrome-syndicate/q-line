@@ -1,0 +1,77 @@
+{
+  "name": "meas_Z1",
+  "description": "measurement error on Z1 in round 2: same check flags twice, no data error",
+  "faults": [
+    {
+      "kind": "M",
+      "target": "Z1",
+      "round": 2,
+      "description": "measurement error on Z1 in round 2"
+    }
+  ],
+  "rounds": 3,
+  "shots": 4000,
+  "logical_failures": 1395,
+  "logical_error_rate": 0.34875,
+  "shots_without_detections": 7,
+  "x_detection_rate_per_round": [
+    0.0,
+    0.251625,
+    0.2674375
+  ],
+  "z_detection_rate_per_round": [
+    0.148625,
+    0.306125,
+    0.327375
+  ],
+  "z_detection_rate_readout": 0.1433125,
+  "circuit": {
+    "depth": 380,
+    "two_qubit_gates": 282,
+    "ops": {
+      "rz": 738,
+      "sx": 534,
+      "ecr": 282,
+      "measure": 33,
+      "x": 26,
+      "reset": 16,
+      "barrier": 4
+    },
+    "physical_qubits": [
+      83,
+      102,
+      105,
+      101,
+      110,
+      111,
+      117,
+      119,
+      121,
+      103,
+      100,
+      120,
+      116,
+      92,
+      104,
+      118,
+      122
+    ]
+  },
+  "saved_shots": {
+    "clean": [
+      982,
+      1087,
+      1341
+    ],
+    "corrected": [
+      1,
+      2,
+      6
+    ],
+    "logical_failure": [
+      0,
+      3,
+      4
+    ]
+  }
+}

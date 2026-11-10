@@ -1,0 +1,77 @@
+{
+  "name": "x_D5",
+  "description": "X on D5 before round 2 (bulk bit flip)",
+  "faults": [
+    {
+      "kind": "X",
+      "target": 4,
+      "round": 2,
+      "description": "X on D5 before round 2"
+    }
+  ],
+  "rounds": 3,
+  "shots": 4000,
+  "logical_failures": 1551,
+  "logical_error_rate": 0.38775,
+  "shots_without_detections": 5,
+  "x_detection_rate_per_round": [
+    0.0,
+    0.219625,
+    0.2575625
+  ],
+  "z_detection_rate_per_round": [
+    0.1509375,
+    0.4095,
+    0.248875
+  ],
+  "z_detection_rate_readout": 0.1448125,
+  "circuit": {
+    "depth": 336,
+    "two_qubit_gates": 288,
+    "ops": {
+      "rz": 751,
+      "sx": 547,
+      "ecr": 288,
+      "measure": 33,
+      "x": 22,
+      "reset": 16,
+      "barrier": 4
+    },
+    "physical_qubits": [
+      83,
+      101,
+      102,
+      110,
+      122,
+      111,
+      118,
+      120,
+      104,
+      84,
+      92,
+      123,
+      119,
+      100,
+      103,
+      121,
+      105
+    ]
+  },
+  "saved_shots": {
+    "clean": [
+      1643,
+      2671,
+      2790
+    ],
+    "corrected": [
+      1,
+      3,
+      4
+    ],
+    "logical_failure": [
+      0,
+      2,
+      5
+    ]
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "name": "z_D3",
+  "description": "Z on D3 before round 2 (corner phase flip)",
+  "faults": [
+    {
+      "kind": "Z",
+      "target": 2,
+      "round": 2,
+      "description": "Z on D3 before round 2"
+    }
+  ],
+  "rounds": 3,
+  "shots": 4000,
+  "logical_failures": 1127,
+  "logical_error_rate": 0.28175,
+  "shots_without_detections": 6,
+  "x_detection_rate_per_round": [
+    0.0,
+    0.384375,
+    0.235625
+  ],
+  "z_detection_rate_per_round": [
+    0.1384375,
+    0.2438125,
+    0.2535
+  ],
+  "z_detection_rate_readout": 0.1484375,
+  "circuit": {
+    "depth": 336,
+    "two_qubit_gates": 261,
+    "ops": {
+      "rz": 693,
+      "sx": 501,
+      "ecr": 261,
+      "measure": 33,
+      "x": 29,
+      "reset": 16,
+      "barrier": 4
+    },
+    "physical_qubits": [
+      83,
+      122,
+      105,
+      102,
+      100,
+      111,
+      117,
+      118,
+      120,
+      103,
+      101,
+      119,
+      116,
+      92,
+      104,
+      110,
+      121
+    ]
+  },
+  "saved_shots": {
+    "clean": [
+      188,
+      560,
+      947
+    ],
+    "corrected": [
+      0,
+      4,
+      5
+    ],
+    "logical_failure": [
+      1,
+      2,
+      3
+    ]
+  }
+}
