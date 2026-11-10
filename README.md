@@ -3,16 +3,6 @@ The Q-Line is a *QEC Syndrome Visualizer Timeline* for visualizing distance-3 ro
 
 <img src="display_integration.png" width="60%" alt="Q Line">
 
-## Display Device Interface
-See the [Display Device README](device/README.md) for setup, the Python API, JSON protocol, and emulator documentation.
-
-> [!WARNING]
-> If no physical device is detected, a local emulator launches automatically.
->
-> **Emulator is for interface development and testing only.**
->
-> The emulator does **not** currently replicate the real device's firmware or behavior accurately. Use it only for testing the interface. Do not rely on it to validate hardware functionality or device-specific behavior.
-
 ## The Physical Device 
 One acrylic plane displays 17 LEDs: 9 data qubit dots and 8 stabilizer checks (cyan = X-type, amber = Z-type) and these panes are repeated for 10 sequential points in time. New events are added from right to left, allowing for a chronological left to right viewing of the last 10 events of the timeline history.
 
@@ -23,6 +13,17 @@ The sequential timeline input can be fully automatic from the computer or interr
 The core takeaway: a data error and a measurement error leave different spacetime signatures. The instrument makes that difference physically visible.
 
 You can also [watch a short video of the q-line running in realtime](q-line.mp4)
+
+## Display Device Interface
+See the [Display Device README](device/README.md) for setup, the Python API, JSON protocol, and emulator documentation.
+
+You can run this locally with `uv run .\Run_Circuit.py`. If no physical device is detected, a local emulator launches automatically.
+
+> [!WARNING]
+>
+> **Emulator is for interface development and testing only.**
+>
+> The emulator does **not** currently replicate the real device's firmware or behavior accurately. Use it only for testing the interface. Do not rely on it to validate hardware functionality or device-specific behavior.
 
 # Reference Materials 
 - [START HERE: QFF_Hackathon_Prompts.pdf](https://github.com/CU-Boulder-Qiskit-Fall-Fest/Hackathon_Prompts/blob/main/QFF_Hackathon_Prompts.pdf) - follow the steps at the top to get qiskit installed and running. ALSO there are solid links and ref materials in the doc itself (not all relevant). 
