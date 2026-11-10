@@ -4,7 +4,7 @@
 Daniel Ritchie [brainwavecoder9](https://github.com/brainwavecoder9), Mullai Vaneshwar Sampangi Raman [kuramaku88](https://github.com/kuramaku88), Timothy Williams [Manta4000](https://github.com/Manta4000), Sean Flannery [sflans99](https://github.com/sflans99)
 
 ### **💡 Project Overview**
-Q-Line is an **Interactive Quantum Error Correction (QEC) application and physical timeline visualizer** for one of the most widely executed surface codes ([[9,1,3]]).
+**Q-Line** is an **Interactive Quantum Error Correction (QEC) application and physical timeline visualizer** for one of the most widely executed surface codes ([[9,1,3]]).
 
 Our project makes quantum error correction approachable by connecting a live quantum circuit simulator to a purpose-built physical display that we call the Q-Line. Users can inject X, Y, and Z errors into data qubits, execute syndrome measurements, control the flow of information, and observe the decoding and correction process while exploring how logical failures emerge.
 
