@@ -1,4 +1,4 @@
-﻿"""USB serial transport for the display-device Pico firmware.
+"""USB serial transport for the display-device Pico firmware.
 
 Requires: pyserial
 Protocol: one newline-terminated JSON object per "next" command.
@@ -20,43 +20,7 @@ DEFAULT_VID = 0x2E8A
 # Pico SDK CDC identifiers; override with --pid or connect(pid=...).
 DEFAULT_PIDS = (0x0009,)
 
-DATA_VALUES = frozenset(("on", "x", "z", "y", "off"))
-CHECK_VALUES = frozenset(("on", "flagged", "off"))
-
-
-@dataclass
-class Panel:
-    d: list[str] = field(default_factory=lambda: ["off"] * 9)
-    z: list[str] = field(default_factory=lambda: ["off"] * 4)
-    x: list[str] = field(default_factory=lambda: ["off"] * 4)
-    logical_failure: bool = False
-
-    def payload(self, reset: bool = False) -> dict:
-        for name, values, count, allowed in (
-            ("d", self.d, 9, DATA_VALUES),
-            ("z", self.z, 4, CHECK_VALUES),
-            ("x", self.x, 4, CHECK_VALUES),
-        ):
-            if not isinstance(values, (list, tuple)):
-                raise ValueError(f"{name} must be an array")
-            if len(values) != count:
-                raise ValueError(f"{name} must contain exactly {count} values")
-            if any(type(v) is not str or v not in allowed for v in values):
-                raise ValueError(f"{name} contains an invalid value")
-
-        if type(self.logical_failure) is not bool:
-            raise ValueError("logical_failure must be a boolean")
-        if type(reset) is not bool:
-            raise ValueError("reset must be a boolean")
-
-        return {
-            "type": "next",
-            "d": list(self.d),
-            "z": list(self.z),
-            "x": list(self.x),
-            "logical_failure": self.logical_failure,
-            "reset": reset,
-        }
+from panel import Panel
 
 
 def ports():
@@ -349,3 +313,68 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+# Automatic hardware/emulator selection.
+# Defined after the original serial implementation so that
+# existing hardware behavior remains available.
+
+_RealDisplayDevice = DisplayDevice
+
+class DisplayDevice:
+    @classmethod
+    def connect(cls, vid=DEFAULT_VID, pid=0x0009, on_message=None):
+        try:
+            port = discover(vid=vid, pid=pid)
+        except RuntimeError as exc:
+            if not str(exc).startswith(
+                "No matching display device found"
+            ):
+                raise
+
+            import socket
+            import subprocess
+            import sys
+            import time
+            from pathlib import Path
+            from emulator_client import DisplayDevice as EmulatorDevice
+
+            def available():
+                try:
+                    with socket.create_connection(
+                        ("127.0.0.1", 8765), timeout=0.2
+                    ):
+                        return True
+                except OSError:
+                    return False
+
+            if not available():
+                script = Path(__file__).resolve().parent / "emulator.py"
+                process = subprocess.Popen(
+                    [sys.executable, str(script)],
+                    cwd=str(script.parent),
+                    stdin=subprocess.DEVNULL,
+                    start_new_session=True,
+                )
+
+                deadline = time.monotonic() + 10
+
+                while not available():
+                    if process.poll() is not None:
+                        raise RuntimeError(
+                            "Emulator failed to start"
+                        )
+                    if time.monotonic() >= deadline:
+                        raise TimeoutError(
+                            "Emulator did not start"
+                        )
+                    time.sleep(0.1)
+
+            return EmulatorDevice.connect(
+                on_message=on_message
+            )
+
+        return _RealDisplayDevice(
+            port,
+            on_message=on_message,
+        )

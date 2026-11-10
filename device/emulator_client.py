@@ -5,7 +5,7 @@ import queue
 import socket
 import threading
 
-from display_device import Panel
+from panel import Panel
 
 
 class DisplayDevice:
