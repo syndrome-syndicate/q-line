@@ -1,4 +1,4 @@
-from display_device import DisplayDevice, Panel
+from device_connection import DisplayDevice, Panel
 
 
 def main():
