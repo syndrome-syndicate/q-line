@@ -27,11 +27,11 @@ We built an interactive experience where users can introduce errors at any time 
 
 Users can also replay past runs, including runs from quantum hardware, to compare results and highlight potentially hardware-specific error patterns.
 
-### **Project Links** -
-[GitHub: Q-Line project](https://github.com/syndrome-syndicate/q-line)
-[Notebook](https://github.com/syndrome-syndicate/q-line/blob/main/Submission_Doc.ipynb)
-[Video: Submission Demo](https://github.com/syndrome-syndicate/q-line/blob/main/Demonstration_video/video_submission.mp4)
-[Video: App/Display Integration](https://github.com/syndrome-syndicate/q-line/blob/main/q-line.mp4)
+### **Project Links**
+[GitHub: Q-Line project](https://github.com/syndrome-syndicate/q-line)  
+[Notebook](https://github.com/syndrome-syndicate/q-line/blob/main/Submission_Doc.ipynb)  
+[Video: Submission Demo](https://github.com/syndrome-syndicate/q-line/blob/main/Demonstration_video/video_submission.mp4)  
+[Video: App/Display Integration](https://github.com/syndrome-syndicate/q-line/blob/main/q-line.mp4)  
 
 
 
