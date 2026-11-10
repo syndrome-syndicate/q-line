@@ -1,9 +1,6 @@
 # The Q-Line
 The Q-Line is a *QEC Syndrome Visualizer Timeline* for visualizing distance-3 rotated surface code using an interactive decoder and physical timeline display.
-
-<img src="q-line.jpg" width="50%" alt="Q Line">
-
-You can also [watch a short video of the q-line running in realtime](q-line.mp4)
+<img src="display_integration.png" width="60%" alt="Q Line">
 
 ## Display Device Interface
 See the [Display Device README](device/README.md) for setup, the Python API, JSON protocol, and emulator documentation.
@@ -18,9 +15,13 @@ See the [Display Device README](device/README.md) for setup, the Python API, JSO
 ## The Physical Device 
 One acrylic plane displays 17 LEDs: 9 data qubit dots and 8 stabilizer checks (cyan = X-type, amber = Z-type) and these panes are repeated for 10 sequential points in time. New events are added from right to left, allowing for a chronological left to right viewing of the last 10 events of the timeline history.
 
+<img src="q-line.jpg" width="50%" alt="Q Line">
+
 The sequential timeline input can be fully automatic from the computer or interrupted for manual intervention. A visitor injects data or modifies X/Y/Z faults via buttons and requests the next frame when ready. A rotary encoder sets modes which the app can define. 
 
 The core takeaway: a data error and a measurement error leave different spacetime signatures. The instrument makes that difference physically visible.
+
+You can also [watch a short video of the q-line running in realtime](q-line.mp4)
 
 # Reference Materials 
 - [START HERE: QFF_Hackathon_Prompts.pdf](https://github.com/CU-Boulder-Qiskit-Fall-Fest/Hackathon_Prompts/blob/main/QFF_Hackathon_Prompts.pdf) - follow the steps at the top to get qiskit installed and running. ALSO there are solid links and ref materials in the doc itself (not all relevant). 
