@@ -1,49 +1,24 @@
-# The Syndrome Tesseract
-A physical QEC visualization instrument built on a distance-3 rotated surface code.
-NOTE: Even without the device, the target of the project is to use qiskit to exec the circuit/run error correction/identify results... same idea even w/o physical interface
+# The Q-Line
+The Q-Line is a *QEC Syndrome Visualizer Timeline* for visualizing distance-3 rotated surface code using an interactive decoder and physical timeline display.
 
-## Device Contract (WIP, FYI until we discuss)
-The application (tbd) will receive something like the following when an event occurs. In this case, "qubit button 4" (of the 9 available) was pressed, to introduce a Z error on that quibit (since error_selector is Z)
-```
-{
-  "type": "event",
-  "seq": 107,
-  "timestamp_ms": 123456,
-  "change": {
-    "control": "qubit_button",
-    "index": 4,
-    "action": "pressed"
+<img src="q-line.jpg" width="50%" alt="Q Line">
 
-    // the step button and quibit buttons are all momentary, so they should be event only, not presented state
-  },
-  "state": {
-    "error_selector": "Z",
-    "run_selector": "run",
-    "mode_selector": 2
-  }
-}
-```
+## Display Device Interface
+See the [Display Device README](device/README.md) for setup, the Python API, JSON protocol, and emulator documentation.
 
-## The Physical Device (WIP, this describes ultimate target)
-One acrylic plane displays 17 LEDs: 9 data qubit dots and 8 stabilizer checks (cyan = X-type, amber = Z-type). Stretch goal = 3 planes each representing a round. A rotary encoder scrubs through syndrome rounds. A visitor injects data or measurement faults via buttons, toggles between raw syndrome and detection event views, and presses decode to run PyMatching. A single verdict LED shows logical success or failure.  
+> [!WARNING]
+> If no physical device is detected, a local emulator launches automatically.
+>
+> **Emulator is for interface development and testing only.**
+>
+> The emulator does **not** currently replicate the real device's firmware or behavior accurately. Use it only for testing the interface. Do not rely on it to validate hardware functionality or device-specific behavior.
+
+## The Physical Device 
+One acrylic plane displays 17 LEDs: 9 data qubit dots and 8 stabilizer checks (cyan = X-type, amber = Z-type) and these panes are repeated for 10 sequential points in time. New events are added from right to left, allowing for a chronological left to right viewing of the last 10 events of the timeline history.
+
+The sequential timeline input can be fully automatic from the computer or interrupted for manual intervention. A visitor injects data or modifies X/Y/Z faults via buttons and requests the next frame when ready. A rotary encoder sets modes which the app can define. 
+
 The core takeaway: a data error and a measurement error leave different spacetime signatures. The instrument makes that difference physically visible.
-
-## Display Use Options (multiple paths to be considered)
-### Syndrome Time Machine (easier, better for demo)
-Press a button, inject a fault, watch it appear across syndrome rounds. Toggle between raw measurements and detection events. See how a data error and a measurement error leave different spacetime signatures. Press decode, see the correction, see the verdict.
-### Fault Propagation Explorer (harder, better for research)
-Same board, different question. Choose CZ or CZZ extraction. Inject an ancilla fault at a specific circuit step. Watch it propagate into data errors, detection events, and potentially a logical failure. See why gate geometry determines whether a fault is recoverable.
-### Both?
-TBD we don't need both options here, but if we get super comfortable with all the things a switch could toggle modes.
-### Other? 
-More to consider, if time/interest allows.
-
-## Stack (Feel free to explore, but this looked like a decent starting point... note that I did find a lib that was deprecated last month/we can review tomorrow afo)
-- Qiskit + Aer: repeated stabilizer extraction circuit, fault injection, measurement records
-- PyMatching: detection event decoding
-- Raspberry Pi / TBD for simulation pipeline (also have AGX Xavier and other compute available, could even be laptop/etc.)
-- RP2040: button input, LED chain control
-- Addressable LEDs w/hardware abstraction layer
 
 # Reference Materials 
 - [START HERE: QFF_Hackathon_Prompts.pdf](https://github.com/CU-Boulder-Qiskit-Fall-Fest/Hackathon_Prompts/blob/main/QFF_Hackathon_Prompts.pdf) - follow the steps at the top to get qiskit installed and running. ALSO there are solid links and ref materials in the doc itself (not all relevant). 
@@ -53,31 +28,3 @@ More to consider, if time/interest allows.
 - [BWC: Hello Quantum](https://github.com/brainwavecollective/hello-quantum) - MIGHT work (quantum libraries have atrocious dependency problems) but this was our hello world ref... my goal was as simple as possible (will revisit this weekend to confirm if I have time)
 - [BWC: Quantum Paradoxes](https://github.com/brainwavecollective/quantum-paradoxes) - fork of what I found to be a very useful/interesting way of visualizing. Projects are interesting and the content is awesome. Helped me understand circuits.
 
-# Timeline 
-### Saturday
-- 12-no later than 4 Daniel & co & [Bldg 61](https://boulderlibrary.org/makerspaces/bldg-61/) figuring out the physical device (we have POC already, but hopefully can come up with a cool final form) 
-- Office hours for beginners on Saturday and Sunday ECCS 201 from 2:30-5 PM (likely super helpful!)
-- 9 AM - 9 PM Hackathon co-working sessions in ECCS 201
-
-### Sunday 
-- 9 AM - 9 PM Hackathon co-working sessions in ECCS 201
-
-### Monday 
-- Finalize all the things 
-- PM project status review 
-
-### Tuesday 
-- AM polish 
-- Submission at noon 
-
-# SUBMISSION INFO 
-We'll need a Jupyter notebook w/5 minute video
-
-# Development Ladder
-
-1) Quantum Circuit & Fault injection
-2) Syndrome Extraction & Data Logging
-3) Integration w/ PyMatching Decoder
-4) Hardware & Microcontroller Firmware
-5) System Integration & Demo Modes
-6) Finalization, Packaging, and Submission
