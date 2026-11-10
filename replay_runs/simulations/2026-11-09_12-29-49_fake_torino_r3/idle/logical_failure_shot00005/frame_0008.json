@@ -2,9 +2,9 @@
   "Data": [
     "on",
     "on",
-    "z",
     "on",
-    "x",
+    "on",
+    "on",
     "on",
     "on",
     "on",
@@ -18,8 +18,8 @@
   ],
   "Sx": [
     "flagged",
-    "off",
-    "off",
+    "flagged",
+    "flagged",
     "off"
   ],
   "logical failure": false,

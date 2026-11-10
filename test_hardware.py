@@ -17,7 +17,10 @@ from Simulation_Logic.hardware import (
 ROUNDS = 3
 
 
-def run_ideal(faults, shots=40, rounds=ROUNDS):
+DECODER_SETTINGS = (("offline", 0), ("realtime", 0), ("realtime", 1), ("realtime", 2))
+
+
+def run_ideal(faults, shots=40, rounds=ROUNDS, decoder="realtime", window=1):
     circuit = build_memory_circuit(rounds, faults)
     result = AerSimulator(method="stabilizer").run(circuit, shots=shots, memory=True, seed_simulator=3).result()
     rows = [m.replace(" ", "") for m in result.get_memory()]
@@ -26,10 +29,47 @@ def run_ideal(faults, shots=40, rounds=ROUNDS):
     md = bitstrings_to_array([r[: 9] for r in rows])
     mz = bitstrings_to_array([r[9: 9 + n] for r in rows])
     mx = bitstrings_to_array([r[9 + n:] for r in rows])
-    return decode_shots(rounds, mx, mz, md)
+    return decode_shots(rounds, mx, mz, md, decoder, window)
 
 
 class HardwareExperimentTests(unittest.TestCase):
+    def test_every_decoder_handles_the_builtin_cases(self):
+        for decoder, window in DECODER_SETTINGS:
+            for case in default_cases(ROUNDS):
+                decoded = run_ideal(case.faults, shots=8, decoder=decoder, window=window)
+                expected_failure = case.name == "x_D1_D4"
+                self.assertTrue((decoded.logical_failure == expected_failure).all(),
+                                f"{case.name} {decoder} {window}")
+
+    def test_realtime_decoder_waits_for_the_next_round(self):
+        # Z1 misread in round 2: pending after round 2, explained after round 3 with no data fix.
+        decoded = run_ideal([Fault("M", "Z1", 2)], shots=1, window=1)
+        self.assertEqual(decoded.pending_z[0, 1].tolist(), [0, 1, 0, 0])
+        self.assertFalse(decoded.pending_z[0, 2].any())
+        self.assertFalse(decoded.corr_x.any())
+        self.assertEqual(decoded.commit_x.tolist(), [1, 2, 3, 3])  # round r fixed after round r+1
+        names = [name for name, _ in shot_frames(decoded, 0)]
+        frames = dict(shot_frames(decoded, 0))
+        self.assertEqual(frames[names[6]]["Sz"], ["off", "flagged", "off", "off"])  # round 2 decode: pending
+        self.assertEqual(frames[names[9]]["Sz"], ["off"] * 4)                       # round 3 decode: resolved
+        self.assertEqual(frames[names[9]]["Data"], ["on"] * 9)
+        self.assertIn("decides round 2", names[9])
+
+        # Window 0 has no look-ahead: it "fixes" a data qubit in round 2 and undoes it in round 3.
+        greedy = run_ideal([Fault("M", "Z1", 2)], shots=1, window=0)
+        self.assertEqual(greedy.corr_x[0, 1].sum(), 1)
+        self.assertTrue((greedy.corr_x[0, 1] == greedy.corr_x[0, 2]).all())
+        self.assertFalse(greedy.logical_failure[0])
+
+    def test_realtime_frames_show_the_correction_when_it_is_committed(self):
+        decoded = run_ideal([Fault("X", 4, 2)], shots=1, window=1)
+        frames = shot_frames(decoded, 0)
+        self.assertEqual(len(frames), 1 + 3 * ROUNDS + 2)
+        self.assertEqual(frames[6][1]["Data"], ["on"] * 9)        # round 2 decode: still waiting
+        self.assertEqual(frames[6][1]["Sz"], ["off", "flagged", "flagged", "off"])
+        self.assertEqual(frames[9][1]["Data"][4], "x")            # round 3 decode: X on D5 fixed
+        self.assertEqual(frames[9][1]["Sz"], ["off"] * 4)
+
     def test_parse_fault(self):
         self.assertEqual(parse_fault("x:d5@2"), Fault("X", 4, 2))
         self.assertEqual(parse_fault("M:Z1@3"), Fault("M", "Z1", 3))

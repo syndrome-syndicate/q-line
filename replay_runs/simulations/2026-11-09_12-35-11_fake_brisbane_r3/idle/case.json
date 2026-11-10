@@ -3,9 +3,10 @@
   "description": "no planned fault: only the device's own noise",
   "faults": [],
   "rounds": 3,
+  "decoder": "realtime (window 1)",
   "shots": 4000,
-  "logical_failures": 1160,
-  "logical_error_rate": 0.29,
+  "logical_failures": 1184,
+  "logical_error_rate": 0.296,
   "shots_without_detections": 152,
   "x_detection_rate_per_round": [
     0.0,
@@ -18,6 +19,12 @@
     0.2446875
   ],
   "z_detection_rate_readout": 0.159625,
+  "decoder_comparison": {
+    "offline": 0.29,
+    "realtime_window_0": 0.2913,
+    "realtime_window_1": 0.296,
+    "realtime_window_2": 0.2915
+  },
   "circuit": {
     "depth": 335,
     "two_qubit_gates": 261,

@@ -17,9 +17,9 @@
     "off"
   ],
   "Sx": [
-    "on",
-    "on",
-    "on",
+    "flagged",
+    "flagged",
+    "flagged",
     "on"
   ],
   "logical failure": false,

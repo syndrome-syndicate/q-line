@@ -179,6 +179,81 @@ class LiveMemoryTests(unittest.TestCase):
             self.assertTrue(link.frames[-1]["reset"])
             plt.close(app.fig)
 
+    def test_led_device_buttons_drive_the_app(self):
+        import queue
+
+        from Data_Log.Pico_Link import PicoLink
+        from Live_visualizer import LiveVisualizer
+
+        class FakeDevice:
+            """Speaks the firmware/emulator protocol: acks panels, queues button events."""
+            port = "FAKE"
+
+            def __init__(self):
+                self.sent, self.events = [], queue.Queue()
+
+            def send_next(self, panel, reset=False):
+                self.sent.append((panel.payload(reset=reset)))
+                return {"type": "ack", "ok": True, "revision": len(self.sent)}
+
+            def read_message(self, timeout=0.0):
+                try:
+                    return self.events.get_nowait()
+                except queue.Empty:
+                    return None
+
+            def press(self, name, **fields):
+                d = self.sent[-1]["d"] if self.sent else ["off"] * 9
+                self.events.put({"type": "event", "event": name, "seq": 0, "d": list(d),
+                                 "mode": 1, "pause": False, **fields})
+
+            def close(self):
+                pass
+
+        device = FakeDevice()
+        link = PicoLink(device=device, verbose=False)
+        with tempfile.TemporaryDirectory() as root:
+            app = LiveVisualizer(seed=1, out_root=root, led=link)
+            link.wait()
+            self.assertTrue(device.sent[0]["reset"])
+
+            # D5 pressed twice on the device: on -> x -> z
+            d = list(device.sent[-1]["d"])
+            d[4] = "x"
+            device.press("update", d=d, pause=True)
+            app.poll_device()
+            self.assertEqual(app.memory.errors, {4: "X"})
+            d[4] = "z"
+            device.press("update", d=d, pause=True)
+            app.poll_device()
+            self.assertEqual(app.memory.errors, {4: "Z"})
+
+            device.press("next_request")  # X checks see the Z error on D5
+            app.poll_device()
+            link.wait()
+            self.assertEqual(len(device.sent), 2)
+            self.assertEqual(device.sent[-1]["d"][4], "z")
+            self.assertIn("flagged", device.sent[-1]["x"])
+
+            device.press("run")
+            app.poll_device()
+            self.assertTrue(app.playing)
+            device.press("pause")
+            app.poll_device()
+            self.assertFalse(app.playing)
+
+            device.press("reset")
+            app.poll_device()
+            link.wait()
+            self.assertTrue(device.sent[-1]["reset"])
+            self.assertEqual(app.memory.errors, {})
+
+            device.press("mode", mode=5)  # unassigned: stays Live
+            app.poll_device()
+            self.assertEqual(app.mode, "Live")
+            app.close()
+            plt.close(app.fig)
+
     def test_writer_uses_one_folder_per_run(self):
         with tempfile.TemporaryDirectory() as root:
             first, second = PicoFrameWriter(root), PicoFrameWriter(root)

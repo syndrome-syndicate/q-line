@@ -6,20 +6,20 @@
     "on",
     "on",
     "on",
-    "y",
+    "on",
     "on",
     "on"
   ],
   "Sz": [
     "off",
-    "off",
+    "flagged",
     "off",
     "off"
   ],
   "Sx": [
     "on",
     "flagged",
-    "on",
+    "flagged",
     "flagged"
   ],
   "logical failure": false,

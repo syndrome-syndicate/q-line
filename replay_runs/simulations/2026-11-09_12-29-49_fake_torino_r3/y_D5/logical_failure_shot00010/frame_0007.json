@@ -12,7 +12,7 @@
   ],
   "Sz": [
     "off",
-    "off",
+    "flagged",
     "off",
     "off"
   ],
@@ -20,7 +20,7 @@
     "on",
     "on",
     "flagged",
-    "on"
+    "flagged"
   ],
   "logical failure": false,
   "reset": false

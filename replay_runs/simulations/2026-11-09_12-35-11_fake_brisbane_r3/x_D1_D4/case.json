@@ -16,9 +16,10 @@
     }
   ],
   "rounds": 3,
+  "decoder": "realtime (window 1)",
   "shots": 4000,
-  "logical_failures": 2530,
-  "logical_error_rate": 0.6325,
+  "logical_failures": 2492,
+  "logical_error_rate": 0.623,
   "shots_without_detections": 2,
   "x_detection_rate_per_round": [
     0.0,
@@ -31,6 +32,12 @@
     0.25125
   ],
   "z_detection_rate_readout": 0.149875,
+  "decoder_comparison": {
+    "offline": 0.6325,
+    "realtime_window_0": 0.6095,
+    "realtime_window_1": 0.623,
+    "realtime_window_2": 0.6282
+  },
   "circuit": {
     "depth": 335,
     "two_qubit_gates": 261,
@@ -67,8 +74,8 @@
     "clean": [],
     "corrected": [
       6,
-      8,
-      10
+      7,
+      8
     ],
     "logical_failure": [
       0,

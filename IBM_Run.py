@@ -6,6 +6,18 @@ LED frames for Replay mode.
     python IBM_Run.py --backend fake_torino --rounds 3 --shots 4000
     python IBM_Run.py --case "my_case=X:D5@2,M:Z1@3"     # your own planned faults
     python IBM_Run.py --list-backends
+    python IBM_Run.py --redecode replay_runs/simulations/<run folder> --window 0
+                                                         # new frames from the saved shots
+
+Decoding (--decoder, --window):
+    realtime (default)  after every round, decode the rounds measured so far and commit the
+                        corrections for rounds that are --window rounds old (default 1:
+                        wait one round so measurement errors show themselves; 0: fix each
+                        round from that round alone). This is what a decoder running next
+                        to the quantum computer can do, and the frames follow it.
+    offline             one decode of the whole shot after the run (best possible).
+    Every case.json also lists the logical error rate of offline and realtime 0/1/2, so the
+    decoders can be compared on the same shots.
 
 Real hardware (uses QPU time; needs a saved IBM Quantum account,
 QiskitRuntimeService.save_account(...)):
@@ -38,6 +50,7 @@ Output:
         <case>/case.json              the case's faults and numbers
         <case>/shots.json             every shot's raw bits (to re-decode later)
         <case>/<category>_shot<N>/    frame_*.json for Replay mode + steps.json (what each frame is)
+                                      (re-made by --redecode, e.g. with another decoder)
     Categories: clean (no detection events), corrected (events, decoded fine),
     logical_failure (decoded wrong).
 """
@@ -50,10 +63,13 @@ import time
 from datetime import datetime
 from pathlib import Path
 
+import numpy as np
+
 from Simulation_Logic.hardware import (
     Case,
     bitstrings_to_array,
     build_memory_circuit,
+    DECODERS,
     decode_shots,
     default_cases,
     merge_rz_through_cz,
@@ -226,15 +242,31 @@ def extract_bits(result, count):
     return bits
 
 
-def save_case(folder: Path, case: Case, rounds: int, bits, per_category: int, stats: dict) -> dict:
+def compare_decoders(rounds: int, mx, mz, md) -> dict:
+    """Logical error rate of each decoder on the same shots."""
+    rates = {"offline": decode_shots(rounds, mx, mz, md, "offline").logical_failure.mean()}
+    for window in (0, 1, 2):
+        rates[f"realtime_window_{window}"] = decode_shots(
+            rounds, mx, mz, md, "realtime", window).logical_failure.mean()
+    return {name: round(float(rate), 4) for name, rate in rates.items()}
+
+
+def save_case(folder: Path, case: Case, rounds: int, bits, per_category: int, stats: dict,
+              decoder: str = "realtime", window: int = 1) -> dict:
     mx, mz, md = bits
-    decoded = decode_shots(rounds, mx, mz, md)
+    decoded = decode_shots(rounds, mx, mz, md, decoder, window)
     numbers = summarize(decoded)
     chosen = pick_shots(decoded, per_category)
     folder.mkdir(parents=True, exist_ok=True)
+    for old in folder.glob("*_shot[0-9]*"):  # frames from an earlier decode of these shots
+        if old.is_dir() and old.name.split("_shot")[0] in ("clean", "corrected", "logical_failure"):
+            for file in old.glob("*.json"):
+                file.unlink()
+            old.rmdir()
 
-    info = {**case.to_json(), "rounds": rounds, **numbers, "circuit": stats,
-            "saved_shots": chosen}
+    info = {**case.to_json(), "rounds": rounds, **numbers,
+            "decoder_comparison": compare_decoders(rounds, mx, mz, md),
+            "circuit": stats, "saved_shots": chosen}
     (folder / "case.json").write_text(json.dumps(info, indent=2), encoding="utf-8")
     raw = {"rounds": rounds, "registers": "mx, mz: check c of round r is bit 4*(r-1)+c; md: D1..D9",
            "mx": ["".join(map(str, row)) for row in mx],
@@ -252,23 +284,32 @@ def save_case(folder: Path, case: Case, rounds: int, bits, per_category: int, st
                     json.dumps(frame, indent=2), encoding="utf-8")
             steps = {f"frame_{number:04d}.json": step for number, (step, _) in enumerate(frames)}
             (shot_dir / "steps.json").write_text(json.dumps(
-                {"case": case.name, "shot": shot, "category": category,
+                {"case": case.name, "shot": shot, "category": category, "decoder": decoded.label,
                  "logical_failure": bool(decoded.logical_failure[shot]), "steps": steps},
                 indent=2), encoding="utf-8")
     return {"name": case.name, "description": case.description, **numbers,
+            "decoder_comparison": info["decoder_comparison"],
             "two_qubit_gates": stats["two_qubit_gates"], "depth": stats["depth"],
             "saved_shots": {k: len(v) for k, v in chosen.items()}}
 
 
+def _cases(meta: dict) -> list[Case]:
+    return [Case(c["name"], c["description"], [parse_fault(_fault_text(f)) for f in c["faults"]])
+            for c in meta["cases"]]
+
+
 def process_results(run_dir: Path, meta: dict, result) -> None:
-    cases = [Case(c["name"], c["description"], [parse_fault(_fault_text(f)) for f in c["faults"]])
-             for c in meta["cases"]]
-    all_bits = extract_bits(result, len(cases))
+    cases = _cases(meta)
+    save_all(run_dir, meta, cases, extract_bits(result, len(cases)))
+
+
+def save_all(run_dir: Path, meta: dict, cases: list[Case], all_bits) -> None:
+    decoder, window = meta.get("decoder", "realtime"), meta.get("window", 1)
     summaries = []
     for case, bits, stats in zip(cases, all_bits, meta["circuits"]):
         summaries.append(save_case(run_dir / case.name, case, meta["rounds"], bits,
-                                   meta["per_category"], stats))
-    summary = {**{k: v for k, v in meta.items() if k not in ("circuits",)}, "results": summaries}
+                                   meta["per_category"], stats, decoder, window))
+    summary = {**{k: v for k, v in meta.items()}, "results": summaries}
     (run_dir / "summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
     print_table(meta["backend"], summaries)
     print(f"Frames saved under {run_dir}")
@@ -282,11 +323,15 @@ def _fault_text(fault: dict) -> str:
 
 
 def print_table(backend: str, summaries: list[dict]) -> None:
-    print(f"\n{backend}")
-    print(f"  {'case':12} {'logical err':>11} {'no events':>9} {'2q gates':>8} {'depth':>6}")
+    decoder = summaries[0]["decoder"] if summaries else ""
+    print(f"\n{backend}   (decoder for the frames: {decoder})")
+    print(f"  {'case':12} {'logical err':>11} {'offline':>8} {'rt w=0':>7} {'rt w=1':>7} "
+          f"{'no events':>9} {'2q gates':>8}")
     for s in summaries:
-        print(f"  {s['name']:12} {s['logical_error_rate']:11.3f} "
-              f"{s['shots_without_detections'] / s['shots']:9.3f} {s['two_qubit_gates']:8d} {s['depth']:6d}")
+        c = s["decoder_comparison"]
+        print(f"  {s['name']:12} {s['logical_error_rate']:11.3f} {c['offline']:8.3f} "
+              f"{c['realtime_window_0']:7.3f} {c['realtime_window_1']:7.3f} "
+              f"{s['shots_without_detections'] / s['shots']:9.3f} {s['two_qubit_gates']:8d}")
 
 
 def run_backend(name: str, cases: list[Case], args) -> Path:
@@ -306,6 +351,7 @@ def run_backend(name: str, cases: list[Case], args) -> Path:
     run_dir.mkdir(parents=True, exist_ok=False)
     meta = {"backend": name, "rounds": args.rounds, "shots": args.shots,
             "per_category": args.per_category, **choice, "seed": args.seed, "created": stamp,
+            "decoder": args.decoder, "window": args.window,
             "noise": ("none" if name == "ideal" else "real device" if is_hardware(name)
                       else "pauli (calibrated gate + readout errors, no idle decoherence)"
                       if pauli else "full device noise model"),
@@ -331,12 +377,31 @@ def run_backend(name: str, cases: list[Case], args) -> Path:
     return run_dir
 
 
-def retrieve(run_dir: Path) -> None:
+def redecode(run_dir: Path, decoder: str, window: int) -> None:
+    """Decode a finished run's saved shots again and rewrite its frames and numbers."""
+    summary = json.loads((run_dir / "summary.json").read_text(encoding="utf-8"))
+    meta = {k: v for k, v in summary.items() if k != "results"}
+    meta.update(decoder=decoder, window=window)
+    if "circuits" not in meta:  # runs saved before the circuit stats were kept in summary.json
+        meta["circuits"] = [json.loads((run_dir / c["name"] / "case.json").read_text(encoding="utf-8"))["circuit"]
+                            for c in meta["cases"]]
+    cases = _cases(meta)
+    all_bits = []
+    for case in cases:
+        raw = json.loads((run_dir / case.name / "shots.json").read_text(encoding="utf-8"))
+        all_bits.append(tuple(np.array([[int(b) for b in row] for row in raw[reg]], np.uint8)
+                              for reg in ("mx", "mz", "md")))
+    save_all(run_dir, meta, cases, all_bits)
+
+
+def retrieve(run_dir: Path, decoder: str = "realtime", window: int = 1) -> None:
     meta = json.loads((run_dir / "job.json").read_text(encoding="utf-8"))
     from qiskit_ibm_runtime import QiskitRuntimeService
 
     job = QiskitRuntimeService().job(meta["job_id"])
     print(f"Job {meta['job_id']}: {job.status()}")
+    meta.setdefault("decoder", decoder)
+    meta.setdefault("window", window)
     process_results(run_dir, meta, job.result())
 
 
@@ -361,15 +426,26 @@ def main(argv=None):
     parser.add_argument("--hardware", action="store_true", help="allow ibm_* backends (uses QPU time)")
     parser.add_argument("--retrieve", type=Path, metavar="RUN_FOLDER",
                         help="fetch and decode a submitted hardware job")
+    parser.add_argument("--decoder", choices=DECODERS, default="realtime",
+                        help="decoder used for the frames (default realtime)")
+    parser.add_argument("--window", type=int, default=1,
+                        help="realtime decoder: rounds to wait before fixing a round (default 1)")
+    parser.add_argument("--redecode", type=Path, metavar="RUN_FOLDER",
+                        help="re-make a finished run's frames from its saved shots (no new circuits)")
     parser.add_argument("--list-backends", action="store_true")
     args = parser.parse_args(argv)
+    if args.window < 0:
+        raise SystemExit("--window must be >= 0")
 
     if args.list_backends:
         print("ideal\n" + "\n".join(fake_backend_names()))
         print("ibm_<name> (real devices on your IBM Quantum account, with --hardware)")
         return
     if args.retrieve:
-        retrieve(args.retrieve)
+        retrieve(args.retrieve, args.decoder, args.window)
+        return
+    if args.redecode:
+        redecode(args.redecode, args.decoder, args.window)
         return
     if args.rounds < 1:
         raise SystemExit("--rounds must be at least 1")

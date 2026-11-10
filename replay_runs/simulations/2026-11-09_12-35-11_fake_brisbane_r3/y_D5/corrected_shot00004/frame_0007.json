@@ -1,7 +1,7 @@
 {
   "Data": [
-    "z",
-    "x",
+    "on",
+    "on",
     "on",
     "on",
     "on",
@@ -17,10 +17,10 @@
     "off"
   ],
   "Sx": [
-    "on",
     "flagged",
-    "on",
-    "on"
+    "flagged",
+    "flagged",
+    "flagged"
   ],
   "logical failure": false,
   "reset": false

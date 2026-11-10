@@ -5,7 +5,7 @@
     "on",
     "on",
     "on",
-    "z",
+    "on",
     "on",
     "on",
     "on"
@@ -13,12 +13,12 @@
   "Sz": [
     "on",
     "on",
-    "on",
-    "on"
+    "flagged",
+    "flagged"
   ],
   "Sx": [
     "off",
-    "off",
+    "flagged",
     "flagged",
     "off"
   ],

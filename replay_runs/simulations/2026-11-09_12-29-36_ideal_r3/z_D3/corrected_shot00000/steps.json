@@ -2,19 +2,20 @@
   "case": "z_D3",
   "shot": 0,
   "category": "corrected",
+  "decoder": "realtime (window 1)",
   "logical_failure": false,
   "steps": {
     "frame_0000.json": "reset",
     "frame_0001.json": "round 1: X checks",
     "frame_0002.json": "round 1: Z checks",
-    "frame_0003.json": "round 1: decode + correct",
+    "frame_0003.json": "round 1: decode + correct (waits for the next round)",
     "frame_0004.json": "round 2: X checks",
     "frame_0005.json": "round 2: Z checks",
-    "frame_0006.json": "round 2: decode + correct",
+    "frame_0006.json": "round 2: decode + correct (decides round 1)",
     "frame_0007.json": "round 3: X checks",
     "frame_0008.json": "round 3: Z checks",
-    "frame_0009.json": "round 3: decode + correct",
+    "frame_0009.json": "round 3: decode + correct (decides round 2, round 3)",
     "frame_0010.json": "final readout: Z checks from the data",
-    "frame_0011.json": "final decode: logical verdict"
+    "frame_0011.json": "final decode: logical verdict (decides round 3, readout)"
   }
 }

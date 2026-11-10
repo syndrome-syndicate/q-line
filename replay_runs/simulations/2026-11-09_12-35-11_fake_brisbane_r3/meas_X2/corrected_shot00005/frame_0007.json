@@ -8,18 +8,18 @@
     "on",
     "on",
     "on",
-    "x"
+    "on"
   ],
   "Sz": [
     "off",
-    "off",
+    "flagged",
     "off",
     "off"
   ],
   "Sx": [
-    "on",
-    "on",
-    "on",
+    "flagged",
+    "flagged",
+    "flagged",
     "on"
   ],
   "logical failure": false,

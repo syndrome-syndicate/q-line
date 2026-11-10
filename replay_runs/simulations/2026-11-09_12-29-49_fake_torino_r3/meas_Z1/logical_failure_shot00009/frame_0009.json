@@ -4,8 +4,8 @@
     "on",
     "on",
     "on",
-    "on",
-    "on",
+    "z",
+    "z",
     "on",
     "on",
     "on"
@@ -19,7 +19,7 @@
   "Sx": [
     "off",
     "off",
-    "flagged",
+    "off",
     "off"
   ],
   "logical failure": false,

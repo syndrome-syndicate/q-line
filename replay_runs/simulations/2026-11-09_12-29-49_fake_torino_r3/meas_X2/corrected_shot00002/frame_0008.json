@@ -5,7 +5,7 @@
     "on",
     "on",
     "on",
-    "z",
+    "on",
     "on",
     "on",
     "on"
@@ -20,7 +20,7 @@
     "off",
     "off",
     "flagged",
-    "off"
+    "flagged"
   ],
   "logical failure": false,
   "reset": false

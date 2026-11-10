@@ -13,12 +13,12 @@
   "Sz": [
     "off",
     "off",
-    "off",
-    "off"
+    "flagged",
+    "flagged"
   ],
   "Sx": [
     "on",
-    "on",
+    "flagged",
     "on",
     "on"
   ],

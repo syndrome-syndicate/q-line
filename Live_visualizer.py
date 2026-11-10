@@ -24,6 +24,16 @@ screen to data_to_pico/<date_time>/frame_NNNN.json (format: Data_Log/Pico_Frames
 and, if the Pico is plugged in, sends it to the LED panel right away
 (Data_Log/Pico_Link.py). Reset frames clear the panel history. --no-led skips the USB.
 Keys: space play/pause, n next, r reset, x/y/z error type, 1-9 inject.
+
+LED device buttons (the Pico, or device/emulator.py when no Pico is plugged in):
+    NEXT (press)        next_request -> Next step / Next frame
+    NEXT (hold 2 s)     reset        -> Reset / Restart
+    PAUSE (latching)    pause / run  -> Pause / Play
+    D1 .. D9            update       -> (device paused, Live) the device cycles the
+                                        qubit on panel 10 off/on/x/z/y; the app applies
+                                        the Pauli that turns its error into the new one
+    Mode 1-8            mode         -> 1 Live, 2 Replay, 3-8 unassigned
+    X/Z selector        (stays on the device; not sent yet)
 Board layout and D1..D9 numbering: Simulation_Logic/circuits.py.
 """
 
@@ -42,7 +52,7 @@ from Data_Log.Pico_Frames import PicoFrameWriter, load_frames, make_frame
 from Data_Log.Pico_Link import PicoLink
 from Round_visualizer import DATA_POSITIONS, X_POSITIONS, Z_POSITIONS
 from Simulation_Logic.circuits import X_CHECK_SUPPORTS, Z_CHECK_SUPPORTS, data_label
-from Simulation_Logic.memory import PAULIS, STEPS, SurfaceCodeMemory
+from Simulation_Logic.memory import PAULIS, STEPS, SurfaceCodeMemory, compose_pauli
 
 CHECK_COLORS = {"X": "#FB8C00", "Z": "#1E88E5"}
 DATA_COLORS = {"on": "#4FC3F7", "x": "#E53935", "y": "#8E24AA", "z": "#F9A825"}
@@ -52,6 +62,8 @@ SELECTED = "#FFCC80"
 IDLE_BUTTON = "0.95"
 MIN_INTERVAL_MS = 50
 MODES = ("Live", "Replay")
+DEVICE_MODES = {1: "Live", 2: "Replay"}  # LED device mode dial -> app mode
+EVENT_POLL_MS = 50
 REPLAY_RUNS = Path("replay_runs")  # IBM_Run.py output; where the folder picker opens
 
 
@@ -71,6 +83,7 @@ class LiveVisualizer:
         self.playing = False
         self.log = deque(maxlen=9)
         self.last_saved = None
+        self.device_d = None  # Data of the last panel sent = what the device's panel 10 shows
 
         self.fig = plt.figure(figsize=(12, 8))
         self.fig.canvas.manager.set_window_title("Surface code memory -> LED panel")
@@ -109,6 +122,13 @@ class LiveVisualizer:
         )
         self.interval_box.on_submit(self.set_interval)
 
+        # Button events from the LED device (or its emulator).
+        self.event_timer = None
+        if self.led is not None and getattr(self.led, "connected", False) and hasattr(self.led, "poll_events"):
+            self.event_timer = self.fig.canvas.new_timer(interval=EVENT_POLL_MS)
+            self.event_timer.add_callback(self.poll_device)
+            self.event_timer.start()
+
         self._log("Encoded |0_L>.")
         for qubit, gate in faults:
             self._log(self.memory.inject(qubit, gate))
@@ -133,10 +153,11 @@ class LiveVisualizer:
             return
         frame = self.current_frame(reset=reset)
         self.last_saved = self.writer.write(frame)
-        if self.led is not None:
-            self.led.send(frame)
+        self._send(frame)
 
     def close(self):
+        if self.event_timer is not None:
+            self.event_timer.stop()
         self.writer.remove_if_empty()
         if self.led is not None:
             self.led.close()
@@ -144,6 +165,51 @@ class LiveVisualizer:
     def _send(self, frame):
         if self.led is not None:
             self.led.send(frame)
+            self.device_d = list(frame["Data"])
+
+    # --------------------------------------------------------- LED device buttons
+    def poll_device(self):
+        for event in self.led.poll_events():
+            self.handle_device_event(event)
+
+    def handle_device_event(self, event):
+        """Map one button event from the LED device onto the app's own buttons."""
+        name = event.get("event")
+        if name == "next_request":
+            self._step()  # like Next step, but leaves Play/Pause as the device has it
+        elif name == "reset":
+            self.reset()
+        elif name in ("pause", "run"):
+            if (name == "run") != self.playing:
+                self.toggle_play()
+        elif name == "update":
+            self._device_edit(event.get("d"))
+        elif name == "mode":
+            mode = DEVICE_MODES.get(event.get("mode"))
+            if mode is None:
+                self._log(f"LED mode {event.get('mode')} is not assigned (1 Live, 2 Replay).")
+                self.render()
+            else:
+                self.set_mode(mode)
+
+    def _device_edit(self, d):
+        """The device changed qubits on its panel 10: make the simulation match."""
+        if not isinstance(d, list) or len(d) != 9:
+            return
+        if self.mode != "Live":
+            self._log("LED qubit buttons only work in Live mode.")
+            self.render()
+            return
+        before = self.device_d or self.current_frame()["Data"]
+        for qubit, (old, new) in enumerate(zip(before, d)):
+            if old == new:
+                continue
+            target = new.upper() if new in ("x", "y", "z") else None  # "on"/"off": no error
+            gate = compose_pauli(self.memory.errors.get(qubit), target)
+            if gate is not None:
+                self._log(self.memory.inject(qubit, gate) + " (LED)")
+        self.device_d = list(d)
+        self.render()
 
     # ------------------------------------------------------------------ modes
     def set_mode(self, mode):

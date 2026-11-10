@@ -6,7 +6,11 @@ the next panel; a frame with "reset": true clears the ten-panel history first.
 Sending runs on a background thread so the GUI never waits for the Pico's ack.
 Every panel is printed to the terminal exactly as sent ("->") with the Pico's
 reply ("<-").
-If no Pico is plugged in, the visualizer still runs and the frames are only saved.
+If no Pico is plugged in, display_device.py starts device/emulator.py (a window
+with the same ten panels and buttons) and connects to that instead.
+
+The device's buttons come back as events (poll_events); Live_visualizer.py maps
+them onto its own buttons.
 """
 
 from __future__ import annotations
@@ -70,6 +74,29 @@ class PicoLink:
     def send(self, frame: dict[str, Any]) -> None:
         if self.connected:
             self._queue.put(frame)
+
+    def poll_events(self, limit: int = 50) -> list[dict[str, Any]]:
+        """Button events the device sent since the last call (never blocks).
+
+        The firmware / emulator sends {"type": "event", "event": NAME, "seq", "d",
+        "mode", "pause"} with NAME one of next_request, reset, pause, run, update, mode.
+        """
+        read = getattr(self.device, "read_message", None)
+        if read is None:
+            return []
+        events = []
+        for _ in range(limit):
+            try:
+                message = read(timeout=0.0)
+            except Exception:
+                break
+            if message is None:
+                break
+            if isinstance(message, dict) and message.get("type") == "event":
+                if self.verbose:
+                    print(f"<- event: {json.dumps(message, separators=(',', ':'))}", flush=True)
+                events.append(message)
+        return events
 
     def wait(self, timeout: float = 5.0) -> None:
         """Block until every queued frame has been sent (used by tests)."""

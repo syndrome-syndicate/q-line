@@ -6,7 +6,7 @@
     "on",
     "on",
     "on",
-    "x",
+    "on",
     "on",
     "on"
   ],
@@ -14,13 +14,13 @@
     "on",
     "on",
     "flagged",
-    "on"
+    "flagged"
   ],
   "Sx": [
     "off",
     "off",
     "off",
-    "off"
+    "flagged"
   ],
   "logical failure": false,
   "reset": false

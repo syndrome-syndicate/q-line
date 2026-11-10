@@ -12,14 +12,14 @@
   ],
   "Sz": [
     "off",
-    "flagged",
+    "off",
     "flagged",
     "off"
   ],
   "Sx": [
     "off",
-    "flagged",
-    "flagged",
+    "off",
+    "off",
     "off"
   ],
   "logical failure": false,

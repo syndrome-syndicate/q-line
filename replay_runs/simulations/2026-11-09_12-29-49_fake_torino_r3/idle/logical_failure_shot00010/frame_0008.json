@@ -14,12 +14,12 @@
     "flagged",
     "on",
     "on",
-    "on"
+    "flagged"
   ],
   "Sx": [
     "off",
     "off",
-    "off",
+    "flagged",
     "off"
   ],
   "logical failure": false,

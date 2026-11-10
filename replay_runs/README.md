@@ -29,13 +29,26 @@ One circuit per case, nothing paused or applied mid-run, so it runs unchanged on
 2. N rounds (default 3) of X checks then Z checks, with mid-circuit measurement and reset
 3. all 9 data qubits measured in Z: gives a last, perfect set of Z checks and Z_L = D1 D2 D3
 
-Decoding is space-time MWPM afterwards. Detection events compare each round with the one
-before, so **a data error flags its checks once, a measurement error flags the same check
-twice in a row**. The frames show the data errors the decoder infers (hardware gives no
-direct view of them) and the logical verdict appears on the last frame.
+Detection events compare each round with the one before, so **a data error flags its
+checks once, a measurement error flags the same check twice in a row**. Decoding is MWPM
+(PyMatching) on the recorded bits, in one of two ways (`--decoder`, `--window`):
+
+- **realtime** (default, window 1): what a decoder running next to the quantum computer
+  can do. After every round it decodes the rounds measured so far and fixes, for good, the
+  rounds that are `window` rounds old. A new flag stays *pending* (still flagged) until the
+  next round shows whether it lasts (data error, corrected) or flips back (measurement
+  error, nothing to correct). `--window 0` fixes each round from that round alone.
+- **offline**: one decode of the whole shot after the run, with every round in view.
+
+Corrections are tracked in software (Pauli frame) and applied to the readout, as in real
+QEC, so the same saved shots can be decoded either way:
+`python IBM_Run.py --redecode <run folder> --decoder offline` re-makes the frames.
+Each `case.json` lists the logical error rate of offline and realtime windows 0/1/2.
 
 Each shot folder has 3 frames per round (X checks, Z checks, decode), then the final
-readout and the final verdict, after an opening reset frame.
+readout and the final verdict, after an opening reset frame. With the realtime decoder a
+decode frame shows the corrections committed at that moment on the data qubits, and its
+name says which round it decided (`round 3: decode + correct (decides round 2)`).
 
 ## Built-in cases (faults in round 2 by default)
 

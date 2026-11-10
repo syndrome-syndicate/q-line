@@ -1,7 +1,7 @@
 {
   "Data": [
-    "y",
-    "x",
+    "on",
+    "on",
     "on",
     "on",
     "on",
@@ -14,10 +14,10 @@
     "off",
     "off",
     "off",
-    "off"
+    "flagged"
   ],
   "Sx": [
-    "on",
+    "flagged",
     "flagged",
     "flagged",
     "on"

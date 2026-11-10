@@ -106,13 +106,267 @@
     }
   ],
   "wall_seconds": 309.3,
+  "decoder": "realtime",
+  "window": 1,
+  "circuits": [
+    {
+      "depth": 253,
+      "two_qubit_gates": 273,
+      "ops": {
+        "sx": 512,
+        "cz": 273,
+        "rz": 224,
+        "measure": 33,
+        "reset": 16,
+        "barrier": 4
+      },
+      "physical_qubits": [
+        18,
+        10,
+        7,
+        32,
+        28,
+        17,
+        36,
+        30,
+        26,
+        9,
+        31,
+        25,
+        48,
+        33,
+        8,
+        29,
+        27
+      ]
+    },
+    {
+      "depth": 245,
+      "two_qubit_gates": 262,
+      "ops": {
+        "sx": 482,
+        "cz": 262,
+        "rz": 229,
+        "measure": 33,
+        "reset": 16,
+        "barrier": 4
+      },
+      "physical_qubits": [
+        47,
+        52,
+        37,
+        48,
+        30,
+        32,
+        27,
+        28,
+        12,
+        51,
+        36,
+        31,
+        17,
+        49,
+        33,
+        29,
+        18
+      ]
+    },
+    {
+      "depth": 253,
+      "two_qubit_gates": 273,
+      "ops": {
+        "sx": 512,
+        "cz": 273,
+        "rz": 224,
+        "measure": 33,
+        "reset": 16,
+        "barrier": 4
+      },
+      "physical_qubits": [
+        18,
+        10,
+        7,
+        32,
+        28,
+        17,
+        36,
+        30,
+        26,
+        9,
+        31,
+        25,
+        48,
+        33,
+        8,
+        29,
+        27
+      ]
+    },
+    {
+      "depth": 245,
+      "two_qubit_gates": 262,
+      "ops": {
+        "sx": 482,
+        "cz": 262,
+        "rz": 229,
+        "measure": 33,
+        "reset": 16,
+        "barrier": 4
+      },
+      "physical_qubits": [
+        47,
+        52,
+        37,
+        48,
+        30,
+        32,
+        27,
+        28,
+        12,
+        51,
+        36,
+        31,
+        17,
+        49,
+        33,
+        29,
+        18
+      ]
+    },
+    {
+      "depth": 248,
+      "two_qubit_gates": 260,
+      "ops": {
+        "sx": 473,
+        "cz": 260,
+        "rz": 221,
+        "measure": 33,
+        "reset": 16,
+        "barrier": 4
+      },
+      "physical_qubits": [
+        47,
+        52,
+        37,
+        36,
+        30,
+        32,
+        27,
+        28,
+        12,
+        51,
+        49,
+        31,
+        26,
+        48,
+        33,
+        29,
+        18
+      ]
+    },
+    {
+      "depth": 253,
+      "two_qubit_gates": 273,
+      "ops": {
+        "sx": 512,
+        "cz": 273,
+        "rz": 223,
+        "measure": 33,
+        "reset": 16,
+        "barrier": 4
+      },
+      "physical_qubits": [
+        18,
+        10,
+        7,
+        32,
+        28,
+        17,
+        36,
+        30,
+        26,
+        9,
+        31,
+        25,
+        48,
+        33,
+        8,
+        29,
+        27
+      ]
+    },
+    {
+      "depth": 255,
+      "two_qubit_gates": 273,
+      "ops": {
+        "sx": 512,
+        "cz": 273,
+        "rz": 228,
+        "measure": 33,
+        "reset": 16,
+        "barrier": 4
+      },
+      "physical_qubits": [
+        18,
+        10,
+        7,
+        32,
+        28,
+        17,
+        36,
+        30,
+        26,
+        9,
+        31,
+        25,
+        48,
+        33,
+        8,
+        29,
+        27
+      ]
+    },
+    {
+      "depth": 254,
+      "two_qubit_gates": 275,
+      "ops": {
+        "sx": 518,
+        "cz": 275,
+        "rz": 225,
+        "measure": 33,
+        "reset": 16,
+        "barrier": 4,
+        "x": 1
+      },
+      "physical_qubits": [
+        18,
+        10,
+        7,
+        32,
+        28,
+        17,
+        36,
+        30,
+        26,
+        9,
+        31,
+        25,
+        48,
+        33,
+        8,
+        29,
+        27
+      ]
+    }
+  ],
   "results": [
     {
       "name": "idle",
       "description": "no planned fault: only the device's own noise",
+      "decoder": "realtime (window 1)",
       "shots": 4000,
-      "logical_failures": 828,
-      "logical_error_rate": 0.207,
+      "logical_failures": 839,
+      "logical_error_rate": 0.20975,
       "shots_without_detections": 288,
       "x_detection_rate_per_round": [
         0.0,
@@ -125,6 +379,12 @@
         0.1884375
       ],
       "z_detection_rate_readout": 0.1185625,
+      "decoder_comparison": {
+        "offline": 0.207,
+        "realtime_window_0": 0.2152,
+        "realtime_window_1": 0.2097,
+        "realtime_window_2": 0.2085
+      },
       "two_qubit_gates": 273,
       "depth": 253,
       "saved_shots": {
@@ -136,9 +396,10 @@
     {
       "name": "x_D5",
       "description": "X on D5 before round 2 (bulk bit flip)",
+      "decoder": "realtime (window 1)",
       "shots": 4000,
-      "logical_failures": 1244,
-      "logical_error_rate": 0.311,
+      "logical_failures": 1289,
+      "logical_error_rate": 0.32225,
       "shots_without_detections": 8,
       "x_detection_rate_per_round": [
         0.0,
@@ -151,6 +412,12 @@
         0.158625
       ],
       "z_detection_rate_readout": 0.1301875,
+      "decoder_comparison": {
+        "offline": 0.311,
+        "realtime_window_0": 0.2795,
+        "realtime_window_1": 0.3222,
+        "realtime_window_2": 0.311
+      },
       "two_qubit_gates": 262,
       "depth": 245,
       "saved_shots": {
@@ -162,9 +429,10 @@
     {
       "name": "z_D3",
       "description": "Z on D3 before round 2 (corner phase flip)",
+      "decoder": "realtime (window 1)",
       "shots": 4000,
-      "logical_failures": 793,
-      "logical_error_rate": 0.19825,
+      "logical_failures": 807,
+      "logical_error_rate": 0.20175,
       "shots_without_detections": 9,
       "x_detection_rate_per_round": [
         0.0,
@@ -177,6 +445,12 @@
         0.1816875
       ],
       "z_detection_rate_readout": 0.12025,
+      "decoder_comparison": {
+        "offline": 0.1983,
+        "realtime_window_0": 0.2177,
+        "realtime_window_1": 0.2018,
+        "realtime_window_2": 0.2008
+      },
       "two_qubit_gates": 273,
       "depth": 253,
       "saved_shots": {
@@ -188,9 +462,10 @@
     {
       "name": "y_D5",
       "description": "Y on D5 before round 2 (both kinds at once)",
+      "decoder": "realtime (window 1)",
       "shots": 4000,
-      "logical_failures": 1235,
-      "logical_error_rate": 0.30875,
+      "logical_failures": 1298,
+      "logical_error_rate": 0.3245,
       "shots_without_detections": 1,
       "x_detection_rate_per_round": [
         0.0,
@@ -203,6 +478,12 @@
         0.157625
       ],
       "z_detection_rate_readout": 0.1305625,
+      "decoder_comparison": {
+        "offline": 0.3088,
+        "realtime_window_0": 0.278,
+        "realtime_window_1": 0.3245,
+        "realtime_window_2": 0.309
+      },
       "two_qubit_gates": 262,
       "depth": 245,
       "saved_shots": {
@@ -214,9 +495,10 @@
     {
       "name": "meas_Z1",
       "description": "measurement error on Z1 in round 2: same check flags twice, no data error",
+      "decoder": "realtime (window 1)",
       "shots": 4000,
-      "logical_failures": 904,
-      "logical_error_rate": 0.226,
+      "logical_failures": 1019,
+      "logical_error_rate": 0.25475,
       "shots_without_detections": 15,
       "x_detection_rate_per_round": [
         0.0,
@@ -229,6 +511,12 @@
         0.3011875
       ],
       "z_detection_rate_readout": 0.123,
+      "decoder_comparison": {
+        "offline": 0.226,
+        "realtime_window_0": 0.3533,
+        "realtime_window_1": 0.2547,
+        "realtime_window_2": 0.225
+      },
       "two_qubit_gates": 260,
       "depth": 248,
       "saved_shots": {
@@ -240,9 +528,10 @@
     {
       "name": "meas_X2",
       "description": "measurement error on X2 in round 2",
+      "decoder": "realtime (window 1)",
       "shots": 4000,
-      "logical_failures": 824,
-      "logical_error_rate": 0.206,
+      "logical_failures": 853,
+      "logical_error_rate": 0.21325,
       "shots_without_detections": 10,
       "x_detection_rate_per_round": [
         0.0,
@@ -255,6 +544,12 @@
         0.18075
       ],
       "z_detection_rate_readout": 0.1164375,
+      "decoder_comparison": {
+        "offline": 0.206,
+        "realtime_window_0": 0.2225,
+        "realtime_window_1": 0.2132,
+        "realtime_window_2": 0.2092
+      },
       "two_qubit_gates": 273,
       "depth": 253,
       "saved_shots": {
@@ -266,9 +561,10 @@
     {
       "name": "x_D1_D4",
       "description": "X on D1 and D4 before round 2: MWPM completes a logical X (expected logical failure)",
+      "decoder": "realtime (window 1)",
       "shots": 4000,
-      "logical_failures": 2880,
-      "logical_error_rate": 0.72,
+      "logical_failures": 2886,
+      "logical_error_rate": 0.7215,
       "shots_without_detections": 7,
       "x_detection_rate_per_round": [
         0.0,
@@ -281,6 +577,12 @@
         0.1805
       ],
       "z_detection_rate_readout": 0.11875,
+      "decoder_comparison": {
+        "offline": 0.72,
+        "realtime_window_0": 0.7023,
+        "realtime_window_1": 0.7215,
+        "realtime_window_2": 0.7198
+      },
       "two_qubit_gates": 273,
       "depth": 255,
       "saved_shots": {
@@ -292,9 +594,10 @@
     {
       "name": "x_D9_late",
       "description": "X on D9 just before the final readout: only the readout sees it",
+      "decoder": "realtime (window 1)",
       "shots": 4000,
-      "logical_failures": 1010,
-      "logical_error_rate": 0.2525,
+      "logical_failures": 1011,
+      "logical_error_rate": 0.25275,
       "shots_without_detections": 15,
       "x_detection_rate_per_round": [
         0.0,
@@ -307,6 +610,12 @@
         0.1833125
       ],
       "z_detection_rate_readout": 0.305125,
+      "decoder_comparison": {
+        "offline": 0.2525,
+        "realtime_window_0": 0.2845,
+        "realtime_window_1": 0.2527,
+        "realtime_window_2": 0.2505
+      },
       "two_qubit_gates": 275,
       "depth": 254,
       "saved_shots": {
