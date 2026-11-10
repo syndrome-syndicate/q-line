@@ -1,5 +1,6 @@
 # The Q-Line
-The Q-Line is a *QEC Syndrome Visualizer Timeline* for visualizing distance-3 rotated surface code using an interactive decoder and physical timeline display.
+The Q-Line is a *QEC Syndrome Visualizer Timeline* for visualizing distance-3 rotated surface code using an interactive decoder and physical timeline display.  
+
 <img src="display_integration.png" width="60%" alt="Q Line">
 
 ## Display Device Interface
