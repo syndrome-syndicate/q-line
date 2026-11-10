@@ -1,0 +1,319 @@
+{
+  "backend": "ideal",
+  "rounds": 3,
+  "shots": 200,
+  "per_category": 3,
+  "optimization_level": null,
+  "seed_transpiler": null,
+  "seed": 7,
+  "created": "2026-11-09_12-29-36",
+  "noise": "none",
+  "cases": [
+    {
+      "name": "idle",
+      "description": "no planned fault: only the device's own noise",
+      "faults": []
+    },
+    {
+      "name": "x_D5",
+      "description": "X on D5 before round 2 (bulk bit flip)",
+      "faults": [
+        {
+          "kind": "X",
+          "target": 4,
+          "round": 2,
+          "description": "X on D5 before round 2"
+        }
+      ]
+    },
+    {
+      "name": "z_D3",
+      "description": "Z on D3 before round 2 (corner phase flip)",
+      "faults": [
+        {
+          "kind": "Z",
+          "target": 2,
+          "round": 2,
+          "description": "Z on D3 before round 2"
+        }
+      ]
+    },
+    {
+      "name": "y_D5",
+      "description": "Y on D5 before round 2 (both kinds at once)",
+      "faults": [
+        {
+          "kind": "Y",
+          "target": 4,
+          "round": 2,
+          "description": "Y on D5 before round 2"
+        }
+      ]
+    },
+    {
+      "name": "meas_Z1",
+      "description": "measurement error on Z1 in round 2: same check flags twice, no data error",
+      "faults": [
+        {
+          "kind": "M",
+          "target": "Z1",
+          "round": 2,
+          "description": "measurement error on Z1 in round 2"
+        }
+      ]
+    },
+    {
+      "name": "meas_X2",
+      "description": "measurement error on X2 in round 2",
+      "faults": [
+        {
+          "kind": "M",
+          "target": "X2",
+          "round": 2,
+          "description": "measurement error on X2 in round 2"
+        }
+      ]
+    },
+    {
+      "name": "x_D1_D4",
+      "description": "X on D1 and D4 before round 2: MWPM completes a logical X (expected logical failure)",
+      "faults": [
+        {
+          "kind": "X",
+          "target": 0,
+          "round": 2,
+          "description": "X on D1 before round 2"
+        },
+        {
+          "kind": "X",
+          "target": 3,
+          "round": 2,
+          "description": "X on D4 before round 2"
+        }
+      ]
+    },
+    {
+      "name": "x_D9_late",
+      "description": "X on D9 just before the final readout: only the readout sees it",
+      "faults": [
+        {
+          "kind": "X",
+          "target": 8,
+          "round": 4,
+          "description": "X on D9 before round 4"
+        }
+      ]
+    }
+  ],
+  "wall_seconds": 0.9,
+  "results": [
+    {
+      "name": "idle",
+      "description": "no planned fault: only the device's own noise",
+      "shots": 200,
+      "logical_failures": 0,
+      "logical_error_rate": 0.0,
+      "shots_without_detections": 200,
+      "x_detection_rate_per_round": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "z_detection_rate_per_round": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "z_detection_rate_readout": 0.0,
+      "two_qubit_gates": 72,
+      "depth": 30,
+      "saved_shots": {
+        "clean": 3,
+        "corrected": 0,
+        "logical_failure": 0
+      }
+    },
+    {
+      "name": "x_D5",
+      "description": "X on D5 before round 2 (bulk bit flip)",
+      "shots": 200,
+      "logical_failures": 0,
+      "logical_error_rate": 0.0,
+      "shots_without_detections": 0,
+      "x_detection_rate_per_round": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "z_detection_rate_per_round": [
+        0.0,
+        0.5,
+        0.0
+      ],
+      "z_detection_rate_readout": 0.0,
+      "two_qubit_gates": 72,
+      "depth": 30,
+      "saved_shots": {
+        "clean": 0,
+        "corrected": 3,
+        "logical_failure": 0
+      }
+    },
+    {
+      "name": "z_D3",
+      "description": "Z on D3 before round 2 (corner phase flip)",
+      "shots": 200,
+      "logical_failures": 0,
+      "logical_error_rate": 0.0,
+      "shots_without_detections": 0,
+      "x_detection_rate_per_round": [
+        0.0,
+        0.25,
+        0.0
+      ],
+      "z_detection_rate_per_round": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "z_detection_rate_readout": 0.0,
+      "two_qubit_gates": 72,
+      "depth": 30,
+      "saved_shots": {
+        "clean": 0,
+        "corrected": 3,
+        "logical_failure": 0
+      }
+    },
+    {
+      "name": "y_D5",
+      "description": "Y on D5 before round 2 (both kinds at once)",
+      "shots": 200,
+      "logical_failures": 0,
+      "logical_error_rate": 0.0,
+      "shots_without_detections": 0,
+      "x_detection_rate_per_round": [
+        0.0,
+        0.5,
+        0.0
+      ],
+      "z_detection_rate_per_round": [
+        0.0,
+        0.5,
+        0.0
+      ],
+      "z_detection_rate_readout": 0.0,
+      "two_qubit_gates": 72,
+      "depth": 30,
+      "saved_shots": {
+        "clean": 0,
+        "corrected": 3,
+        "logical_failure": 0
+      }
+    },
+    {
+      "name": "meas_Z1",
+      "description": "measurement error on Z1 in round 2: same check flags twice, no data error",
+      "shots": 200,
+      "logical_failures": 0,
+      "logical_error_rate": 0.0,
+      "shots_without_detections": 0,
+      "x_detection_rate_per_round": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "z_detection_rate_per_round": [
+        0.0,
+        0.25,
+        0.25
+      ],
+      "z_detection_rate_readout": 0.0,
+      "two_qubit_gates": 72,
+      "depth": 31,
+      "saved_shots": {
+        "clean": 0,
+        "corrected": 3,
+        "logical_failure": 0
+      }
+    },
+    {
+      "name": "meas_X2",
+      "description": "measurement error on X2 in round 2",
+      "shots": 200,
+      "logical_failures": 0,
+      "logical_error_rate": 0.0,
+      "shots_without_detections": 0,
+      "x_detection_rate_per_round": [
+        0.0,
+        0.25,
+        0.25
+      ],
+      "z_detection_rate_per_round": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "z_detection_rate_readout": 0.0,
+      "two_qubit_gates": 72,
+      "depth": 30,
+      "saved_shots": {
+        "clean": 0,
+        "corrected": 3,
+        "logical_failure": 0
+      }
+    },
+    {
+      "name": "x_D1_D4",
+      "description": "X on D1 and D4 before round 2: MWPM completes a logical X (expected logical failure)",
+      "shots": 200,
+      "logical_failures": 200,
+      "logical_error_rate": 1.0,
+      "shots_without_detections": 0,
+      "x_detection_rate_per_round": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "z_detection_rate_per_round": [
+        0.0,
+        0.25,
+        0.0
+      ],
+      "z_detection_rate_readout": 0.0,
+      "two_qubit_gates": 72,
+      "depth": 30,
+      "saved_shots": {
+        "clean": 0,
+        "corrected": 0,
+        "logical_failure": 3
+      }
+    },
+    {
+      "name": "x_D9_late",
+      "description": "X on D9 just before the final readout: only the readout sees it",
+      "shots": 200,
+      "logical_failures": 0,
+      "logical_error_rate": 0.0,
+      "shots_without_detections": 0,
+      "x_detection_rate_per_round": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "z_detection_rate_per_round": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "z_detection_rate_readout": 0.25,
+      "two_qubit_gates": 72,
+      "depth": 31,
+      "saved_shots": {
+        "clean": 0,
+        "corrected": 3,
+        "logical_failure": 0
+      }
+    }
+  ]
+}

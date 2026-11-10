@@ -1,0 +1,27 @@
+{
+  "Data": [
+    "on",
+    "on",
+    "on",
+    "on",
+    "on",
+    "on",
+    "on",
+    "on",
+    "on"
+  ],
+  "Sz": [
+    "off",
+    "flagged",
+    "flagged",
+    "off"
+  ],
+  "Sx": [
+    "flagged",
+    "flagged",
+    "off",
+    "off"
+  ],
+  "logical failure": false,
+  "reset": false
+}

@@ -1,0 +1,10 @@
+# Run_Circuit.py / Live_visualizer.py / IBM_Run.py. Tested on Windows 11, Python 3.11.
+# (surface17/ has its own requirements, incl. qiskit-qec.)
+qiskit==1.4.5
+qiskit-aer==0.16.4
+qiskit-ibm-runtime>=0.40     # fake IBM backends + real hardware (SamplerV2); 0.44.1 tested
+pymatching>=2.2
+matplotlib>=3.8
+numpy>=1.26
+pyserial>=3.5,<4             # LED panel over USB (device/display_device.py)
+panqec                       # only because Simulation_Logic/decoder.py imports it

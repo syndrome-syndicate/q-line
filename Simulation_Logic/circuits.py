@@ -21,6 +21,24 @@ X_CHECK_SUPPORTS = ((1, 2), (0, 1, 3, 4), (4, 5, 7, 8), (6, 7))
 Z_CHECK_POSITIONS = ((0, 1), (2, 1), (1, 2), (3, 2))
 X_CHECK_POSITIONS = ((2, 0), (1, 1), (2, 2), (1, 3))
 
+# CNOT order inside each check, as 4 time layers (None = no qubit there).
+# A fault on an ancilla halfway through a check spreads to the data qubits of the
+# last two CNOTs ("hook" error). The order puts that pair across the logical it
+# could otherwise help complete: horizontal for X checks (X_L is the left
+# column), vertical for Z checks (Z_L is the top row).
+#   X checks: top-left, top-right, bottom-left, bottom-right
+#   Z checks: top-left, bottom-left, top-right, bottom-right
+X_CHECK_SCHEDULE = ((None, None, 1, 2), (0, 1, 3, 4), (4, 5, 7, 8), (6, 7, None, None))
+Z_CHECK_SCHEDULE = ((None, None, 0, 3), (1, 4, 2, 5), (3, 6, 4, 7), (5, 8, None, None))
+for _schedule, _supports in ((X_CHECK_SCHEDULE, X_CHECK_SUPPORTS), (Z_CHECK_SCHEDULE, Z_CHECK_SUPPORTS)):
+    assert all(
+        {q for q in order if q is not None} == set(support)
+        for order, support in zip(_schedule, _supports)
+    ), "check schedule does not match the check supports"
+    for _layer in range(4):  # a data qubit is used by at most one check per layer
+        _used = [order[_layer] for order in _schedule if order[_layer] is not None]
+        assert len(_used) == len(set(_used)), "two checks share a qubit in one layer"
+
 
 def data_label(qubit: int) -> str:
     """Panel label of data qubit index 0..8."""
@@ -59,9 +77,10 @@ def prepare_logical_zero(circuit: QuantumCircuit, data) -> None:
 def append_x_checks(circuit: QuantumCircuit, data, ancilla_x, clbits) -> None:
     """Measure the 4 X checks into ``clbits`` and reset their ancillas."""
     circuit.h(ancilla_x)
-    for check_index, support in enumerate(X_CHECK_SUPPORTS):
-        for data_index in support:
-            circuit.cx(ancilla_x[check_index], data[data_index])
+    for layer in range(4):
+        for check_index, order in enumerate(X_CHECK_SCHEDULE):
+            if order[layer] is not None:
+                circuit.cx(ancilla_x[check_index], data[order[layer]])
     circuit.h(ancilla_x)
     for check_index in range(4):
         circuit.measure(ancilla_x[check_index], clbits[check_index])
@@ -70,9 +89,10 @@ def append_x_checks(circuit: QuantumCircuit, data, ancilla_x, clbits) -> None:
 
 def append_z_checks(circuit: QuantumCircuit, data, ancilla_z, clbits) -> None:
     """Measure the 4 Z checks into ``clbits`` and reset their ancillas."""
-    for check_index, support in enumerate(Z_CHECK_SUPPORTS):
-        for data_index in support:
-            circuit.cx(data[data_index], ancilla_z[check_index])
+    for layer in range(4):
+        for check_index, order in enumerate(Z_CHECK_SCHEDULE):
+            if order[layer] is not None:
+                circuit.cx(data[order[layer]], ancilla_z[check_index])
     for check_index in range(4):
         circuit.measure(ancilla_z[check_index], clbits[check_index])
     circuit.reset(ancilla_z)
