@@ -14,10 +14,12 @@ The core takeaway: a data error and a measurement error leave different spacetim
 
 You can also [watch a short video of the q-line running in realtime](q-line.mp4)
 
-## Display Device Interface
+## App & Display Device Interface
+You can run this entire project locally with `uv run Run_Circuit.py`. 
+
 See the [Display Device README](device/README.md) for setup, the Python API, JSON protocol, and emulator documentation.
 
-You can run this locally with `uv run Run_Circuit.py`. If no physical device is detected, a local emulator launches automatically.
+If no physical device is detected, a local emulator launches automatically.
 
 > [!WARNING]
 >
@@ -25,11 +27,4 @@ You can run this locally with `uv run Run_Circuit.py`. If no physical device is 
 >
 > The emulator does **not** currently replicate the real device's firmware or behavior accurately. Use it only for testing the interface. Do not rely on it to validate hardware functionality or device-specific behavior.
 
-# Reference Materials 
-- [START HERE: QFF_Hackathon_Prompts.pdf](https://github.com/CU-Boulder-Qiskit-Fall-Fest/Hackathon_Prompts/blob/main/QFF_Hackathon_Prompts.pdf) - follow the steps at the top to get qiskit installed and running. ALSO there are solid links and ref materials in the doc itself (not all relevant). 
-- [Paper/Code: Fault-Tolerant Stabilizer Measurements in Surface Codes with Three-Qubit Gates
-]([https://arxiv.org/abs/2506.09029](https://github.com/oldjosias/three-qubit-ft-sc)) - the code and paper contain great reference material, more deep than we need, but solid visuals. code will be helpful for building circuit and timeline.
-- [NVIDIA QEC reference](https://nvidia.github.io/cudaq-qec/components/qec/codes.html) - not what we will be using, but helpful for well-rounded understanding
-- [BWC: Hello Quantum](https://github.com/brainwavecollective/hello-quantum) - MIGHT work (quantum libraries have atrocious dependency problems) but this was our hello world ref... my goal was as simple as possible (will revisit this weekend to confirm if I have time)
-- [BWC: Quantum Paradoxes](https://github.com/brainwavecollective/quantum-paradoxes) - fork of what I found to be a very useful/interesting way of visualizing. Projects are interesting and the content is awesome. Helped me understand circuits.
 
