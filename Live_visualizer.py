@@ -463,7 +463,7 @@ class LiveVisualizer:
                     )
                 fill = {"off": OFF, "on": color, "flagged": FLAGGED}[state]
                 ax.add_patch(Circle(position, 0.17, facecolor=fill, edgecolor=color, linewidth=2, zorder=2))
-                label = f"{basis}{index}"
+                label = f"{basis}{index + 1}"
                 if basis in outcomes:
                     label += "\n" + ("+1" if outcomes[basis][index] == 0 else "-1")
                 ax.text(*position, label, ha="center", va="center", fontsize=7, fontweight="bold",

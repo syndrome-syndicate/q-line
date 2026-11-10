@@ -1,16 +1,15 @@
 # Display Device
 
-Python interface for communicating with the display device (Raspberry Pi Pico 2 was used)
+Python interface for communicating with the display device (currently using a Raspberry Pi Pico 2 but others are possible)
 
 ## Quick Start
 
 Connect the device via USB, then run:
 
 ```bash
-uv run app.py
-```
+uv run .\device\led_test_app.py```
 
-`uv` automatically manages Python (3.14.9+) and the required dependencies.
+NOTE: `uv` automatically manages Python (3.14.9+) and the required dependencies.
 
 > [!WARNING]
 >

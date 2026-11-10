@@ -12,13 +12,13 @@ The sequential timeline input can be fully automatic from the computer or interr
 
 The core takeaway: a data error and a measurement error leave different spacetime signatures. The instrument makes that difference physically visible.
 
-You can also [watch a short video of the q-line running in realtime](q-line.mp4)
+You can [watch a short video of the q-line running in realtime](q-line.mp4)
 
-## App & Display Device Interface
+See the [Display Device README](device/README.md) for additional setup, the Python API, JSON protocol, and emulator documentation.
+
+## Running the App & Display Device Interface
+
 You can run this entire project locally with `uv run Run_Circuit.py`. 
-
-See the [Display Device README](device/README.md) for setup, the Python API, JSON protocol, and emulator documentation.
-
 If no physical device is detected, a local emulator launches automatically.
 
 > [!WARNING]
@@ -26,5 +26,3 @@ If no physical device is detected, a local emulator launches automatically.
 > **Emulator is for interface development and testing only.**
 >
 > The emulator does **not** currently replicate the real device's firmware or behavior accurately. Use it only for testing the interface. Do not rely on it to validate hardware functionality or device-specific behavior.
-
-

@@ -12,8 +12,8 @@ One frame is the whole array as the laptop shows it:
     }
 
 Order: Data[0..8] is D1..D9 (rows D1 D2 D3 / D4 D5 D6 / D7 D8 D9); Sz[i] / Sx[i]
-are checks Zi / Xi:
-    Z0 = D1 D4        Z1 = D2 D3 D5 D6   Z2 = D4 D5 D7 D8   Z3 = D6 D9
+are checks Z1..Z4 / X1..X4 (array indices 0..3):
+    Z1 = D1 D4        Z2 = D4 D5 D7 D8   Z3 = D2 D3 D5 D6   Z4 = D6 D9
     X0 = D2 D3        X1 = D1 D2 D4 D5   X2 = D5 D6 D8 D9   X3 = D7 D8
 (defined in Simulation_Logic/circuits.py).
 

@@ -21,18 +21,17 @@ Our unique approach includes a ten-step physical timeline, allowing users to int
 QEC is important, but can be hard to understand. We wanted to build something that other people could use to understand QEC better. 
 
 ### **🛠️ Implementation & results** 
-We give the user an interactive experience where one can introduce errors at any time and see how they propagate, are corrected, or cause logical failures.
+We created an interactive user experience where one is able to introduce X, Z, and Y errors at any time to see how they propagate, are corrected, or cause logical failures. **The same interactive experience is available through both an app and a physical device.**
 
-We built an interactive experience where users can introduce errors at any time and see how they propagate, are corrected, or cause logical failures. This experience is available both on an app, or through a physical device.
+Users can also **replay past runs, including runs from quantum hardware,** to compare results and highlight potentially hardware-specific error patterns.
 
-Users can also replay past runs, including runs from quantum hardware, to compare results and highlight potentially hardware-specific error patterns.
+Interestingly, the problems we encountered in setting this up were related to the types of issues that make it very challenging to understand these concepts. Breaking down the individual aspects, and also surfacing discrete information at various points in time, while representing it chronologically, makes it easier to visualize what is happening. The result is that this assisted with our own understanding.
 
 ### **Project Links**
 [GitHub: Q-Line project](https://github.com/syndrome-syndicate/q-line)  
 [Notebook](https://github.com/syndrome-syndicate/q-line/blob/main/Submission_Doc.ipynb)  
-[Video: Submission Demo](https://github.com/syndrome-syndicate/q-line/blob/main/Demonstration_video/video_submission.mp4)  
+[Video: Submission Demo](https://github.com/syndrome-syndicate/q-line/blob/main/Demonstration_video/video_submission.mp4) 
 [Video: App/Display Integration](https://github.com/syndrome-syndicate/q-line/blob/main/q-line.mp4)  
-
 
 
 

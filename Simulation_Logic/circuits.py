@@ -13,12 +13,12 @@ from qiskit import ClassicalRegister, QuantumCircuit, QuantumRegister
 # Z1 = D2 D3 D5 D6           X1 = D1 D2 D4 D5
 # Z2 = D4 D5 D7 D8           X2 = D5 D6 D8 D9
 # Z3 = D6 D9 (right edge)    X3 = D7 D8 (bottom edge)
-Z_CHECK_SUPPORTS = ((0, 3), (1, 2, 4, 5), (3, 4, 6, 7), (5, 8))
+Z_CHECK_SUPPORTS = ((0, 3), (3, 4, 6, 7), (1, 2, 4, 5), (5, 8))
 X_CHECK_SUPPORTS = ((1, 2), (0, 1, 3, 4), (4, 5, 7, 8), (6, 7))
 
 # Where each check sits on the board, in grid units (data qubit k is at the
 # centre of cell (column + 0.5, row + 0.5)).
-Z_CHECK_POSITIONS = ((0, 1), (2, 1), (1, 2), (3, 2))
+Z_CHECK_POSITIONS = ((0, 1), (1, 2), (2, 1), (3, 2))
 X_CHECK_POSITIONS = ((2, 0), (1, 1), (2, 2), (1, 3))
 
 # CNOT order inside each check, as 4 time layers (None = no qubit there).
@@ -29,7 +29,7 @@ X_CHECK_POSITIONS = ((2, 0), (1, 1), (2, 2), (1, 3))
 #   X checks: top-left, top-right, bottom-left, bottom-right
 #   Z checks: top-left, bottom-left, top-right, bottom-right
 X_CHECK_SCHEDULE = ((None, None, 1, 2), (0, 1, 3, 4), (4, 5, 7, 8), (6, 7, None, None))
-Z_CHECK_SCHEDULE = ((None, None, 0, 3), (1, 4, 2, 5), (3, 6, 4, 7), (5, 8, None, None))
+Z_CHECK_SCHEDULE = ((None, None, 0, 3), (3, 6, 4, 7), (1, 4, 2, 5), (5, 8, None, None))
 for _schedule, _supports in ((X_CHECK_SCHEDULE, X_CHECK_SUPPORTS), (Z_CHECK_SCHEDULE, Z_CHECK_SUPPORTS)):
     assert all(
         {q for q in order if q is not None} == set(support)
