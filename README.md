@@ -3,6 +3,8 @@ The Q-Line is a *QEC Syndrome Visualizer Timeline* for visualizing distance-3 ro
 
 <img src="q-line.jpg" width="50%" alt="Q Line">
 
+You can also [watch a short video of the q-line running in realtime]
+
 ## Display Device Interface
 See the [Display Device README](device/README.md) for setup, the Python API, JSON protocol, and emulator documentation.
 
