@@ -31,9 +31,6 @@ Interestingly, the problems we encountered in setting this up were related to th
 [GitHub: Q-Line project](https://github.com/syndrome-syndicate/q-line)  
 [Notebook](https://github.com/syndrome-syndicate/q-line/blob/main/Submission_Doc.ipynb)  
 [Video: Submission Demo](https://github.com/syndrome-syndicate/q-line/blob/main/Demonstration_video/video_submission.mp4) 
-[Video: App/Display Integration](https://github.com/syndrome-syndicate/q-line/blob/main/q-line.mp4)  
-
-
-
+[Video: App/Display Integration](https://github.com/syndrome-syndicate/q-line/blob/main/q-line.mp4) *note for the highly perceptive, this was an earlier demo where the colors were mapped incorrectly, but that has since been [resolved](https://github.com/syndrome-syndicate/q-line/commit/5c41b6ef8a7afd8336eef5c49e47fd5b24fb6923)... we just didn't have time to upload a new video)*
 
 
